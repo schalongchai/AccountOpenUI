@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Customer Information</title>
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+<script src="./js/bootstrap.min.js"></script>
+</head>
+</head>
+<body>
+ <div
+    style="background-color: rgb(0, 123, 255); height: 2.5rem; padding-top: 8px; padding-left: 20px; color: white;">
+    <div>
+      <img
+        src=" data: data:image/png;base64,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"
+        width="25px" border="1"> Customer services - Customer
+      Info
+    </div>
+    <div style="relation: absolute;"></div>
+  </div>
+<div style="padding-left:100px;">
+<table >
+<tr>
+  <td><b>CIF Number</b></td><td><span th:text="${customer.id}"></span></td><td width="100"></td><td>Education</td><td>Master degree</td>
+</tr>
+<tr>
+  <td>Customer Date</td><td>10/02/2019</td><td width="20"></td><td>Occupation</td><td>Programmer</td>
+</tr>
+<tr>
+  <td>Name Thai</td><td><span th:text="${customer.name}"></span></td><td width="20"></td><td>Business type</td><td>Company</td>
+</tr>
+<tr>
+  <td>Name English</td><td>Mana</td><td width="20"></td><td>Email</td><td>mas123@mail.com</td>
+</tr>
+<tr>
+  <td>Customer type</td><td>Individual</td><td width="20"></td><td>Home phone</td><td>02-22202222</td>
+</tr>
+<tr>
+  <td>Citizen ID</td><td>3909988080</td><td width="20"></td><td>Mobile number</td><td>098-8889998</td>
+</tr>
+<tr>
+  <td>Address</td><td>22/22</td><td width="20"></td><td>Customer Consent</td><td>yes</td>
+</tr>
+<tr>
+  <td>Nationality</td><td>Thai</td><td width="20"></td><td>Consent Date</td><td>12/02/2019</td>
+</tr>
+<tr>
+  <td>Date of Birth</td><td>10/20/2000</td><td width="20"></td><td>Customer Status</td><td>Active</td>
+</tr>
+<tr>
+  <td>Gender</td><td>Male</td><td width="20"></td><td>Martial status</td><td>Single</td>
+</tr>
+<tr>
+  <td colspan="5" align="right"><input type="button" value="close" class="btn btn-primary"></td>
+</tr>
+</table>
+</div>
+
+</body>
+</html>
