@@ -10,6 +10,6 @@ public class AccountController {
 
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
 	public String account(ModelMap model) {
-		return "pages/bulkaccount/list";
+		return "bulkaccount/list";
 	}
 }
