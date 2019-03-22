@@ -15,7 +15,7 @@ import com.acc.open.model.Customer;
 
 @Service
 public class CustomerService {
-    @Value("${custom.rest.uri}")
+    @Value("${spring.datasource.url}")
     private String restURI;
 
 	public List<Customer> getCustomer()
