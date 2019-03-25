@@ -4,26 +4,45 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Customer Search</title>
 <link rel="stylesheet" href="./css/bootstrap.min.css">
+<link rel="stylesheet" href="./css/custom.css">
 <script src="./js/jquery-3.2.1.slim.min.js"></script>
 <script	src="./js/popper.min.js" ></script>
 <script src="./js/bootstrap.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-default" style="background-color: #19839e;">
-	
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#" style="color: white;"> <img
-				src="./img/icon.png" width="30" height="30"
-				class="d-inline-block align-top" alt=""> Smart Account
-				Services
-			</a>
-		
-		</div>
-		<div style="color:white;">User : Chalongchai / 
-		<a href="./home"><span class="badge badge-danger">Sign out</span></a></div>
-</nav>		
-<div style="height:10px;background-color:white;"></div>
+<!-- Navbar -->
+ <nav class="navbar navbar-expand-sm bg-info navbar-dark shadow">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Customer Services</a>
 
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+	 <li class="nav-item text-white"><a class="nav-link text-white" href="#">Date : 25/03/2019</a></li>
+	 <li class="nav-item text-white"><a class="nav-link text-warning" href="#">Branch : 0123-Silom Complex</a></li>
+	</ul>
+    <ul class="navbar-nav">
+	 <li class="nav-item dropdown">
+	  <a class="nav-link dropdown-toggle text-white" href="#" id="navbardrop" data-toggle="dropdown">
+		User : Chalongchai
+	  </a>
+	  <div class="dropdown-menu dropdown-menu-right">
+		<a class="dropdown-item" href="#">Profile</a>
+		<a class="dropdown-item" href="#">Setting</a>
+		<div class="dropdown-divider"></div>
+		<a class="dropdown-item" href="./home">log out</a>
+	  </div> 
+	</li>
+   </ul>
+  </div> 
+</nav>
+<nav class="navbar"></nav>
+<!-- Nav tabs -->
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a class="nav-link active" href="./customer">Customer</a>
@@ -34,9 +53,11 @@
   <li class="nav-item">
     <a class="nav-link" href="./report">Report</a>
   </li>
-  
  </ul>
- 
+<!-- Nav tabs --> 
+ <div class="row">
+
+  <div class="col-sm-3">
   <div style="padding-left: 100px;">
     <br>Customer Search
     <br><br>
@@ -45,7 +66,7 @@
 
         <tr>
           <td>CIF</td>
-          <td><input type="text" class="form-control" placeholder="cif number"></td>
+          <td><input type="text" class="form-control small" placeholder="cif number"></td>
         </tr>
         <tr>
           <td>First name</td>
@@ -65,15 +86,16 @@
         </tr>
         <tr>
           <td></td>
-          <td><input type="submit" class="btn btn-primary"
+          <td><br><input type="submit" class="btn btn-success btn-sm"
             value="Search"> <input type="button"
-            class="btn btn-primary" value="Clear"></td>
+            class="btn btn-success btn-sm" value="Clear"></td>
         </tr>
       </table>
     </form>
   </div>
-  <br>
-  <div style="padding-left: 100px; width: 85%;">
+  </div>
+  
+   <div style="padding-left: 100px; width: 85%;">
     Search Result <br>
     <br>
     <table class="table table-sm">
@@ -97,5 +119,9 @@
       </tr>
     </table>
   </div>
+   </div>
+</div> 
+  
+  
 </body>
 </html>

@@ -3,61 +3,58 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login</title>
-<link rel="stylesheet" href="./css/bootstrap.min.css">
+<link rel="stylesheet" href="./css/bootstrap.css">
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/jquery-3.2.1.slim.min.js"></script>
 <script src="./js/popper.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-light" style="background-color: #19839e;">
-  <a class="navbar-brand" href="#" style="background-color: #19839e;">
-    <img src="./img/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    <span style="color:white;">Smart Account Services </span>
-  </a>
-  <span style="color:white;"></span>
-</nav>
- 
-  <div align="center" style="padding: 100px;">
-    <form id="loginForm" method="post" action="./customer">
-      <div
-        style="width: 400px; height: 270px; border: 1px solid rgba(0, 0, 0, .125); border-radius: .25rem;">
-        <br>
-        <table>
-          <tr>
-            <td colspan="2"><div
-                style="background-color:#16af54; color: white; padding: 8px 8px;; border-radius: .25rem;">Login</div></td>
-          </tr>
-          <tr>
-            <td colspan="2" style="font-size: 12px; color: grey;">
-              You must log in to access this page.</td>
-          </tr>
-          <tr>
-            <td>User id:</td>
-            <td><input type="text"
-              class="form-control" style="height: 32px;"></input></td>
-          </tr>
-          <tr>
-            <td>Password:</td>
-            <td><input type="password" id="pwd"
-              class="form-control" style="height: 32px;"></td>
-          </tr>
-          <tr>
-            <td>Login Branch:</td>
-            <td><select class="form-control" style="height: 34px;">
-                <option>head office</option>
-                <option>Silom</option>
-            </select></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><br>
-              <button type="submit" class="btn btn-primary">Login</button>
-              <br></td>
-          </tr>
-        </table>
-      </div>
-    </form>
-  </div>
 
+ <nav class="navbar navbar-expand-sm bg-info navbar-dark shadow">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Customer Services</a>
+
+ <!--  Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+    
+  </div> 
+</nav>
+	<div class="container"> 
+		<div class="row">
+			<div class="col"></div>
+			<div class="col-sm-4">
+				<form action="./customer" method="post">
+					<br>
+					<h5 class="modal-title">Log in</h5>
+					<div class="form-group small clearfix">
+						<label class="checkbox-inline text-secondary">You must log
+							in to access this page.</label>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control small"
+							placeholder="Username" required="required">
+					</div>
+					<div class="form-group">
+						<input type="password" class="form-control"
+							placeholder="Password" required="required">
+					</div>
+					<div class="form-group">
+					<select class="form-control small">
+		                <option>head office</option>
+		                <option>Silom</option>
+            		</select>
+            		</div>
+					<input type="submit" class="btn btn-success btn-block btn-md"
+						value="Login">
+				</form>
+			</div>
+			<div class="col"></div>
+		</div>
+	</div>
 </body>
 </html>
