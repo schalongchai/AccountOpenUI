@@ -27,6 +27,7 @@ public class CustomerController {
 	public String CustomerGet(ModelMap model) {
 		List<Customer> c = cs.getCustomer();
 		model.addAttribute("customers", c);
+		model.addAttribute("xxxx","My name is xx");
 		return "customer/custsearch";
 	}
 

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: AccountOpenUI
 Implementation-Version: SP
-Built-By: e1045469
+Built-By: e1088945
 Implementation-Vendor-Id: com.acc.open
-Build-Jdk: 1.8.0_92
+Build-Jdk: 1.8.0_201
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/AccountOpenUI
 Created-By: Maven Integration for Eclipse

@@ -59,21 +59,21 @@
 
   <div class="col-sm-3">
   <div style="padding-left: 100px;">
-    <br>Customer Search
+    <br><b>Customer Search</b>
     <br><br>
     <form method="GET" action="./customer">
       <table border="0">
 
         <tr>
-          <td>CIF</td>
+          <td>CIF Number</td>
           <td><input type="text" class="form-control small" placeholder="cif number"></td>
         </tr>
         <tr>
-          <td>First name</td>
+          <td>First name [EN/TH]</td>
           <td><input type="text" class="form-control" placeholder="first name"></td>
         </tr>
         <tr>
-          <td>Last name</td>
+          <td>Last name [EN/TH]</td>
           <td><input type="text" class="form-control"  placeholder="last name"></td>
         </tr>
         <tr>
@@ -94,9 +94,9 @@
     </form>
   </div>
   </div>
-  
+  <span th:text="${xxxx}"></span>
    <div style="padding-left: 100px; width: 85%;">
-    Search Result <br>
+    <b>Search Result </b><br>
     <br>
     <table class="table table-sm">
       <thead class="thead-light">
