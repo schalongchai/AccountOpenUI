@@ -55,17 +55,44 @@
   </li>
  </ul>
 <!-- Nav tabs --> 
+<div class="col-sm-3">
   <div style="padding-left: 100px;">
-  <br>
-  <form action="/reportresult" method = "post">
+    <br><b>Report Criteria</b>
+    <br><br>
+    <form method="GET" action="./customer">
+      <table border="0">
 
-			Report Name: <input type="text" class="form-control sm" placeholder="Report Name"> 
-			<BR> Account Branch: <input type="text" class="form-control sm" placeholder="Account Branch"> 
-			<BR> <input type="submit" class="btn btn-success btn-block btn-md" value="Search">
-
-
-		</form>
-  
+        <tr>
+          <td>Report Name:</td>
+          <td><select class="form-control small">
+  				<option value="volvo">Volvo</option>
+ 				 <option value="saab">Saab</option>
+  				<option value="opel">Opel</option>
+  				<option value="audi">Audi</option>
+				</select></td>
+        </tr>
+        <tr>
+          <td>Branch:</td>
+          <td><input type="text" class="form-control"></td>
+        </tr>
+        <tr>
+          <td>Start Date:</td>
+          <td><input type="text" class="form-control"></td>
+        </tr>
+        <tr>
+          <td>End Date:</td>
+          <td><input type="text" class="form-control"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><br><input type="submit" class="btn btn-success btn-sm"
+            value="Search"> <input type="button"
+            class="btn btn-success btn-sm" value="Clear"></td>
+        </tr>
+      </table>
+    </form>
   </div>
+  </div>
+
 </body>
 </html>
