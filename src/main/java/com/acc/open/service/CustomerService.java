@@ -11,34 +11,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.acc.open.model.Customer;
+import com.acc.open.model.AoCustomerInfo;
 
 @Service
 public class CustomerService {
     @Value("${spring.datasource.url}")
     private String restURI;
+    
 
-	public List<Customer> getCustomer()
+	public List<AoCustomerInfo> getCustomer()
 	{
-	    final String uri = restURI + "/api/customer/";
+	    final String uri = restURI + "/api/customers/";
 
 	    RestTemplate restTemplate = new RestTemplate();
 	    //String result = restTemplate.getForObject(uri, String.class);
-	    ResponseEntity<List<Customer>> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<List<Customer>>(){});
-	    List<Customer> customers = response.getBody();
+	    ResponseEntity<List<AoCustomerInfo>> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<List<AoCustomerInfo>>(){});
+	    List<AoCustomerInfo> aoCusts = response.getBody();
 
-	    return customers;
+	    return aoCusts;
 	}
 
-	public Customer getCustomerById(String id)
+	public AoCustomerInfo getCustomerById(String id)
 	{
-	    final String uri = restURI + "/api/customer/{id}";
+	    final String uri = restURI + "/api/customers/{id}";
 	    RestTemplate restTemplate = new RestTemplate();
 	    Map<String, String> params = new HashMap<String, String>();
 	    params.put("id", id);
 
-	    ResponseEntity<Customer> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<Customer>(){},params);
-	    Customer customer = response.getBody();
+	    ResponseEntity<AoCustomerInfo> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<AoCustomerInfo>(){},params);
+	    AoCustomerInfo customer = response.getBody();
 
 	    return customer;
 	}

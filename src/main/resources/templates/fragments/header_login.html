@@ -1,0 +1,61 @@
+<head th:fragment="header_include">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Customer Services System</title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/custom.css">
+	<script src="./js/jquery-3.2.1.slim.min.js"></script>
+	<script src="./js/popper.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+</head>
+<!-- Navbar -->
+<div th:fragment="header_login">
+	<nav class="navbar fixed-top navbar-expand-sm bg-info navbar-dark shadow">
+		<!-- Brand -->
+		
+		<a class="navbar-brand" href="#"><img src="./img/icon.png" height="30"><font style="font-size:16px;color:white;font-family:Arial"> Customer Services</font></a>
+
+		<!-- Toggler/collapsibe Button -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#collapsibleNavbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		
+		<!-- Navbar links -->
+		<div class="collapse navbar-collapse justify-content-end"
+			id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item text-white">
+					<a class="nav-link text-white" href="#">Date : <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span></a>
+				</li>
+				
+				<li class="nav-item text-white">
+					<a class="nav-link text-warning" href="#"><span>Branch : </span><span th:text="${current_user_login.brnUser}"></span></a>
+				</li>
+			</ul>
+			<ul class="navbar-nav">
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle text-white" href="#"
+					id="navbardrop" data-toggle="dropdown"> 
+					<span th:if="${current_user_login}">User : </span><span  th:if="${current_user_login}" th:text="${current_user_login.userId}"></span>
+				</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a class="dropdown-item sm" href="#"  th:if="${current_user_login}" th:text="${current_user_login.firstname + ' '+current_user_login.lastname}">Profile</a> 
+<!-- 					<a class="dropdown-item" href="#">Setting</a> -->
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="./signout">log out</a>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+	<br><br>
+	<div th:if="${tabActive}">
+	<nav class="navbar"></nav>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs">
+		<li class="nav-item"><a	th:classappend="${tabActive=='Account'}? 'nav-link active'"	class="nav-link" href="./account">Account</a></li>
+		<li class="nav-item"><a	th:classappend="${tabActive=='Customer'}? 'nav-link active'" class="nav-link" href="./customer">Customer</a></li>
+		<li class="nav-item"><a	th:classappend="${tabActive=='Report'}? 'nav-link active'" class="nav-link" href="./report">Report</a></li>
+	</ul>
+	</div>
+</div>
+<!-- Nav tabs -->

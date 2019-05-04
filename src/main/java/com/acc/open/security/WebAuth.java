@@ -19,5 +19,9 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
        //Disable cross site reference script posting
        http.csrf().disable();
        http.authorizeRequests().anyRequest().permitAll();
+       
+       http
+       .formLogin().loginPage("/login").permitAll();
+
     }
 }

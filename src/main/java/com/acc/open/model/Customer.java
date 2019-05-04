@@ -1,10 +1,12 @@
 package com.acc.open.model;
 
+
 public class Customer {
+
 
     private Long id;
     private String name;
-
+    
 
     public Long getId() {
 		return id;
@@ -22,7 +24,7 @@ public class Customer {
 		this.name = name;
 	}
 
-	protected Customer() {}
+	public Customer() {}
 
     public Customer(Long id, String firstName) {
     	this.id = id;
