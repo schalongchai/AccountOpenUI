@@ -17,20 +17,22 @@
 				<br><br>
 			    <img src="./img/icon.png" height="30">
 				<font style="font-size:20px;color:Black;font-family:Arial"><b> Customer Services</b></font>
-				<form action="./signin" method="POST">
+				<form th:action="@{/login}" method="POST">
 					
-					<div class="form-group small clearfix">
-						
+					<div class="form-group small clearfix">				
 						<label class="checkbox-inline text-secondary"> 
 							You must login to access this page. 
 						</label>
 					</div>
-				
-					<div th:if="${logOutMsg}">
-   						 <div class="alert alert-info alert-dismissible fade show small" th:text="${logOutMsg}"></div>
-					</div>
-					<div th:if="${errorMsg}">
-   						 <div class="alert alert-danger alert-dismissible fade show small" th:text="${errorMsg}"></div>
+
+		
+					<div th:if="${param.logout}" class="alert alert-info alert-dismissible fade show small"> 
+                    	You have been logged out.
+                	</div>
+					<div th:if="${param.error}">
+   						 <div class="alert alert-danger alert-dismissible fade show small">
+   						 Sorry, your username or password are incorrect - please try again
+   						 </div>
 					</div>
 				
 					<div class="form-group">
@@ -45,8 +47,7 @@
 		                <option>Silom</option>
             		</select>
             		</div>
-					<input type="submit" class="btn btn-success btn-block btn-md"
-						value="Login">
+					<input type="submit" class="btn btn-success btn-block btn-md" value="Login">
 				</form>
 			</div>
 			<div class="col"></div>

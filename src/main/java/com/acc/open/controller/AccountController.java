@@ -18,7 +18,7 @@ public class AccountController {
 	
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
 	public String account(ModelMap model,HttpServletRequest request) {
-		AoUser u = loginService.getUserLogin(request);	
+		AoUser u = loginService.getUserLogin(request);
 		model.addAttribute("current_user_login",u);
 		model.addAttribute("tabActive","Account");
 		return "bulkaccount/list";

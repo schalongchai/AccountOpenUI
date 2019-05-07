@@ -29,7 +29,7 @@
 				</li>
 				
 				<li class="nav-item text-white">
-					<a class="nav-link text-warning" href="#"><span>Branch : </span><span th:text="${current_user_login.brnUser}"></span></a>
+					<a class="nav-link text-warning" href="#"><span>Branch : </span><span th:if="${current_user_login}" th:text="${current_user_login.brnUser}"></span></a>
 				</li>
 			</ul>
 			<ul class="navbar-nav">
@@ -42,7 +42,7 @@
 						<a class="dropdown-item sm" href="#"  th:if="${current_user_login}" th:text="${current_user_login.firstname + ' '+current_user_login.lastname}">Profile</a> 
 <!-- 					<a class="dropdown-item" href="#">Setting</a> -->
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="./signout">log out</a>
+						<a class="dropdown-item" href="./logout">log out</a>
 					</div></li>
 			</ul>
 		</div>
