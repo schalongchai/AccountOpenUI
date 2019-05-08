@@ -40,7 +40,7 @@
 				</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a class="dropdown-item sm" href="#"><span sec:authentication="principal.fullname">Full name</span></a>
-<!-- 						<span th:text ="${#authentication.getPrincipal().getFirstname()+' '+#authentication.getPrincipal().getLastname()}">Full name</span>  -->
+						<a class="dropdown-item" href="#" th:text ="${#authentication.getPrincipal().getAoUsersRole().getRoleDesc()}">Roles</a> 
 <!-- 					<a class="dropdown-item" href="#">Setting</a> -->
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="./logout">log out</a>

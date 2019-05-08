@@ -1,4 +1,4 @@
-package com.acc.open.security;
+package com.acc.open.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +17,11 @@ public class AppUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		AoUser activeUserInfo = loginService.getUserByUserName(userName);
+		
+		if (activeUserInfo == null) {
+            throw new UsernameNotFoundException(userName);
+        }
+		
 		return activeUserInfo;
 	}
 
