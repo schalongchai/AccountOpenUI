@@ -24,6 +24,7 @@ public class AoUser implements UserDetails {
 
 	private String username;
 	
+	@SuppressWarnings("unused")
 	private String fullname;
 	
 	private String password;
