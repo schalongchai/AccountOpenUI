@@ -24,7 +24,8 @@ public class AoUser implements UserDetails {
 
 	private String username;
 	
-
+	private String fullname;
+	
 	private String password;
 
 
@@ -117,6 +118,14 @@ public class AoUser implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getFullname() {
+		return  this.firstname + " " + this.lastname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 }

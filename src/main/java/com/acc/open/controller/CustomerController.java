@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.acc.open.model.AoCustomerInfo;
 import com.acc.open.service.CustomerService;
-import com.acc.open.service.LogingService;
 
 @Controller
 public class CustomerController {
 	@Autowired
 	private CustomerService cs;
-	@Autowired
-	private LogingService loginService;
-	
 	
 	@RequestMapping(value = "/customer", method = RequestMethod.POST)
 	public String homePath(ModelMap model) {
@@ -32,7 +28,6 @@ public class CustomerController {
 	public String CustomerGet(ModelMap model,HttpServletRequest request) {
 		List<AoCustomerInfo> c = cs.getCustomer();
 		model.addAttribute("customers", c);
-		model.addAttribute("current_user_login",loginService.getUserLogin(request));
 		model.addAttribute("tabActive","Customer");
 		return "customer/custsearch";
 	}

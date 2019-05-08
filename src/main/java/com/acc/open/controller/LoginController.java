@@ -1,8 +1,5 @@
 package com.acc.open.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -28,8 +25,7 @@ public class LoginController implements ErrorController {
     }
 	
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public String logoutPage (HttpServletRequest request, HttpServletResponse response,ModelMap model) {
-		loginService.destroyUserLogin(request, response);
+	public String logoutPage () {
 		return "redirect:/login?logout";
 	}
 	

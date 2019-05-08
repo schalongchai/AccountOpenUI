@@ -39,7 +39,9 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 		        .defaultSuccessUrl("/account")	
 				.and()
 				.logout().permitAll()
-				.logoutUrl("/logout") 
+				.and()
+				.logout().clearAuthentication(true)
+				.logoutUrl("/logout")
 				.and().exceptionHandling() //exception handling configuration
 				.accessDeniedPage("/error")
 				.and()

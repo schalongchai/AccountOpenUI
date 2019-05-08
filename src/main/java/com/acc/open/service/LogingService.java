@@ -43,12 +43,14 @@ public class LogingService {
 		return user;
 	}
 
-	public AoUser getUserLogin(HttpServletRequest request) {
+	@Deprecated
+	public AoUser getUserLogin() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		AoUser user = (AoUser) auth.getPrincipal();
 		return user;
 	}
 	
+	@Deprecated
 	public void destroyUserLogin(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null){    

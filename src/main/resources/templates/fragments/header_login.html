@@ -29,17 +29,17 @@
 				</li>
 				
 				<li class="nav-item text-white">
-					<a class="nav-link text-warning" href="#"><span>Branch : </span><span th:if="${current_user_login}" th:text="${current_user_login.brnUser}"></span></a>
+					<a class="nav-link text-warning" href="#"><span>Branch : </span><span sec:authentication="principal.brnUser">Branch</span></a>
 				</li>
 			</ul>
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle text-white" href="#"
 					id="navbardrop" data-toggle="dropdown"> 
-					<span th:if="${current_user_login}">User : </span><span  th:if="${current_user_login}" th:text="${current_user_login.userId}"></span>
+					<span>User : </span><span sec:authentication="principal.userId">user id</span>
 				</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item sm" href="#"  th:if="${current_user_login}" th:text="${current_user_login.firstname + ' '+current_user_login.lastname}">Profile</a> 
+						<a class="dropdown-item sm" href="#"><span sec:authentication="principal.fullname">Full name</span></a> 
 <!-- 					<a class="dropdown-item" href="#">Setting</a> -->
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="./logout">log out</a>
