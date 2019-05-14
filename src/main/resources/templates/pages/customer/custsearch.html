@@ -26,31 +26,31 @@
 	<div class="d-flex flex-wrap  align-items-start" >
 		<div style="padding-left: 100px;">
 	    		<br>Customer Search<br><br> 		
-				<form method="GET" action="./customer">
+				<form method="GET" action="./customerSearch">
 					<table class="form-group">
 						<tr>
 							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">CIF : </label></td>
-							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm" name="cif"
 								placeholder="customer number"></td>
 						</tr>
 						<tr>
 							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">First name : </label></td>
-							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm" name="fname"
 								placeholder="first name"></td>
 						</tr>
 						<tr>
 							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Last name : </label></td>
-							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm" name="lname"
 								placeholder="last name"></td>
 						</tr>
 						<tr>
 							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Citizen id : </label></td>
-							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm" name="citizen"
 								placeholder="citizen id 13 digits"></td>
 						</tr>
 						<tr>
 							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Account number : </label></td>
-							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm" name="acctno"
 								placeholder="account number 10 digits"></td>
 						</tr>
 						<tr>
@@ -83,7 +83,7 @@
 					<td><span th:text="${customer.citizenId}"></span></td>
 					<td><span
 						th:text="${customer.firstNameTh+' '+customer.lastNameTh}"></span></td>
-					<td><span th:text="${customer.wkAddrNo}"></span></td>
+					<td><span th:text="${#strings.defaultString(customer.wkAddrNo,'') + ' ' + #strings.defaultString(customer.wkAddrProvince,'')}"></span></td>
 					<td>Active</td>
 					<td><a class="linkAcct" data-toggle="modal"
 						data-target="#ModalAcct" href=""
@@ -92,83 +92,7 @@
 			</table>
 		</div>
 	</div>
-    
-	<!-- <div class="container">
-	<div class="row">
-		<div class="col-sm-4">
-			<div style="padding-left: 100px;">
-				<br>Customer Search <br> <br>
-				<form method="GET" action="./customer">
-					<table>
-						<tr>
-							<td>CIF</td>
-							<td><input type="text" class="form-control small"
-								placeholder="cif number"></td>
-						</tr>
-						<tr>
-							<td>First name</td>
-							<td><input type="text" class="form-control"
-								placeholder="first name"></td>
-						</tr>
-						<tr>
-							<td>Last name</td>
-							<td><input type="text" class="form-control"
-								placeholder="last name"></td>
-						</tr>
-						<tr>
-							<td>Citizen ID</td>
-							<td><input type="text" class="form-control"
-								placeholder="citizen id 13 digits"></td>
-						</tr>
-						<tr>
-							<td>Account Number</td>
-							<td><input type="text" class="form-control"
-								placeholder="account number 10 digits"></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><br> <input type="submit"
-								class="btn btn-success btn-sm" value="Search"> <input
-								type="button" class="btn btn-success btn-sm" value="Clear"></td>
-						</tr>
-					</table>
-				</form>
-			</div>
-			
-		</div>
-		<div class="col-sm-8" style="padding-left: 100px; width: 85%;">
-				Search Result <br> <br>
-				<table class="table table-sm"
-					style="font-size: 13px;">
-					<thead class="thead-light">
-						<tr>
-							<th scope="col">CIF</th>
-							<th scope="col">Citizen ID</th>
-							<th scope="col">Customer Name</th>
-							<th scope="col">Address</th>
-							<th scope="col">Status</th>
-							<th scope="col">View</th>
-						</tr>
-					</thead>
-					<tr th:each="customer : ${customers}">
-						<td><a class="linkCust" data-toggle="modal"
-							data-target="#ModalCust" href=""
-							th:attr="data-href=${customer.cifNo}"><span
-								th:text="${customer.cifNo}"></span></a></td>
-						<td><span th:text="${customer.citizenId}"></span></td>
-						<td><span
-							th:text="${customer.firstNameTh+' '+customer.lastNameTh}"></span></td>
-						<td><span th:text="${customer.wkAddrNo}"></span></td>
-						<td>Active</td>
-						<td><a class="linkAcct" data-toggle="modal"
-							data-target="#ModalAcct" href=""
-							th:attr="data-href=${customer.cifNo}">view account</a></td>
-					</tr>
-				</table>
-			</div>
-	</div>
-	</div> -->
-
+  
 	<!-- Modal Customer-->
 	<div class="modal" id="ModalCust" tabindex="-10" role="dialog"
 		aria-labelledby="customerModalLabel" aria-hidden="true">
@@ -184,7 +108,7 @@
 				</div>
 				<div class="modal-body"></div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
@@ -206,7 +130,7 @@
 				</div>
 				<div class="modal-body"></div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>

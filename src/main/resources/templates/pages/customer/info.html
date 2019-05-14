@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -14,22 +15,22 @@
   <td><b>CIF Number</b></td><td><span th:text="${customer.cifNo}"></span></td><td width="100"></td><td>Education</td><td>Master degree</td>
 </tr>
 <tr>
-  <td>Customer Date</td><td>10/02/2019</td><td width="20"></td><td>Occupation</td><td>Programmer</td>
+  <td>Customer Date</td><td><span th:text="${#dates.format(customer.createdDate, 'dd MMM yyyy')}"></span></td><td width="20"></td><td>Occupation</td><td><span th:text="${customer.occupation}"></span></td>
 </tr>
 <tr>
   <td>Name Thai</td><td><span th:text="${customer.firstNameTh}"></span></td><td width="20"></td><td>Business type</td><td>Company</td>
 </tr>
 <tr>
-  <td>Name English</td><td>Mana</td><td width="20"></td><td>Email</td><td>mas123@mail.com</td>
+  <td>Name English</td><td><span th:text="${customer.firstNameEn}"></span></td><td width="20"></td><td>Email</td><td>mas123@mail.com</td>
 </tr>
 <tr>
-  <td>Customer type</td><td>Individual</td><td width="20"></td><td>Home phone</td><td>02-22202222</td>
+  <td>Customer type</td><td>Individual</td><td width="20"></td><td>Home phone</td><td><span th:text="${customer.homeNumber}"></span></td>
 </tr>
 <tr>
-  <td>Citizen ID</td><td>3909988080</td><td width="20"></td><td>Mobile number</td><td>098-8889998</td>
+  <td>Citizen ID</td><td><span th:text="${customer.citizenId}"></span></td><td width="20"></td><td>Mobile number</td><td>098-8889998</td>
 </tr>
 <tr>
-  <td>Address</td><td>22/22</td><td width="20"></td><td>Customer Consent</td><td>yes</td>
+  <td>Address</td><td><span th:text="${customer.wkAddrNo}"></span></td><td width="20"></td><td>Customer Consent</td><td>yes</td>
 </tr>
 <tr>
   <td>Nationality</td><td>Thai</td><td width="20"></td><td>Consent Date</td><td>12/02/2019</td>

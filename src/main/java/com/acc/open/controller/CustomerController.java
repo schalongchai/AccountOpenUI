@@ -24,11 +24,31 @@ public class CustomerController {
 		return "customer/custsearch";
 	}
 
-	@RequestMapping(value = "/customer", method = RequestMethod.GET)
-	public String CustomerGet(ModelMap model,HttpServletRequest request) {
-		List<AoCustomerInfo> c = cs.getCustomer();
-		model.addAttribute("customers", c);
+	
+	
+	  @RequestMapping(value = "/customer", method = RequestMethod.GET) public
+	  String CustomerGet(ModelMap model,HttpServletRequest request) {
+	  List<AoCustomerInfo> c = cs.getCustomer(); model.addAttribute("customers",
+	  c); model.addAttribute("tabActive","Customer"); return "customer/custsearch";
+	  }
+	 
+	 
+	
+	@RequestMapping(value = "/customerSearch", method = RequestMethod.GET)
+	public String search(@RequestParam("cif") String cif,
+			@RequestParam("fname") String fname,
+			@RequestParam("lname") String lname,
+			@RequestParam("citizen") String citizen,
+			@RequestParam("acctno") String acctno,
+			ModelMap model) {
+		
+		List<AoCustomerInfo> c = cs.getCustomerSearch(cif,fname,lname,citizen,acctno);
 		model.addAttribute("tabActive","Customer");
+		if(c!=null){
+			model.addAttribute("customers", c);			
+		}else {
+			model.addAttribute("response", "Customer not found!");
+		}
 		return "customer/custsearch";
 	}
 

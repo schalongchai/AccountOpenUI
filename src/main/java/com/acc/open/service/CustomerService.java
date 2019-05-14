@@ -43,4 +43,24 @@ public class CustomerService {
 
 	    return customer;
 	}
+	
+	public List<AoCustomerInfo> getCustomerSearch(String cif,String fname,String lname,String citizen,String acctno)
+	{
+	    final String uri = restURI + "/api/customers?cif={cif}&fname={fname}&lname={lname}&citizen={citizen}&acctno={acctno}";
+	    RestTemplate restTemplate = new RestTemplate();
+	    Map<String, String> params = new HashMap<String, String>();
+	    List<AoCustomerInfo> customer = null;
+	    params.put("cif", cif);
+	    params.put("fname", fname);
+	    params.put("lname", lname);
+	    params.put("citizen", citizen);
+	    params.put("acctno", acctno); 
+	    try {
+	    	ResponseEntity<List<AoCustomerInfo>> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<List<AoCustomerInfo>>(){},params);
+	    	customer = response.getBody();
+	    }catch(Exception e) {
+	    	
+	    }
+	    return customer;
+	}
 }
