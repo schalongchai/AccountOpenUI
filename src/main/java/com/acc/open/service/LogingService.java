@@ -43,7 +43,7 @@ public class LogingService {
 		return user;
 	}
 
-	@Deprecated
+
 	public AoUser getUserLogin() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		AoUser user = (AoUser) auth.getPrincipal();

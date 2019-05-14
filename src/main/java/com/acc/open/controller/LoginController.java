@@ -16,6 +16,9 @@ public class LoginController implements ErrorController {
 
 	@RequestMapping("/")
     public String index(){
+		if(loginService.getUserLogin()!=null) {
+			return "redirect:/account";
+		}
         return "login/login";
     }
 	

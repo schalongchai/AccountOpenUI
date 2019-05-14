@@ -1,15 +1,105 @@
 <html>
 <div th:replace="../fragments/header_login.html :: header_include"></div>
+<script>
+	$(document).ready(function() {
+		$('.linkAcct').on('click', function() {
+			var id = $(this).attr('data-href');
+			$('.modal-body').load('/customerinfo?cif=' + id, function() {
+				$('#ModalAcct').modal({
+					show : true
+				});
+			});
+		});
+
+		$('.linkCust').on('click', function() {
+			var id = $(this).attr('data-href');
+			$('.modal-body').load('/customerinfo?cif=' + id, function() {
+				$('#ModalCust').modal({
+					show : true
+				});
+			});
+		});
+	});
+</script>
 <body>
-<div th:replace="../fragments/header_login.html :: header_login"></div>
+	<div th:replace="../fragments/header_login.html :: header_login"></div>
+	<div class="d-flex flex-wrap  align-items-start" >
+		<div style="padding-left: 100px;">
+	    		<br>Customer Search<br><br> 		
+				<form method="GET" action="./customer">
+					<table class="form-group">
+						<tr>
+							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">CIF : </label></td>
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+								placeholder="customer number"></td>
+						</tr>
+						<tr>
+							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">First name : </label></td>
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+								placeholder="first name"></td>
+						</tr>
+						<tr>
+							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Last name : </label></td>
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+								placeholder="last name"></td>
+						</tr>
+						<tr>
+							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Citizen id : </label></td>
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+								placeholder="citizen id 13 digits"></td>
+						</tr>
+						<tr>
+							<td><label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Account number : </label></td>
+							<td style="padding-left:5px;"><input type="text" class="form-control form-control-sm"
+								placeholder="account number 10 digits"></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td style="padding-left:5px;"><br> <input type="submit"
+								class="btn btn-success btn-sm" value="Search"> <input
+								type="reset" class="btn btn-success btn-sm" value="Clear"></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		<div class="flex-fill" style="padding-right:20px;padding-left: 20px;">   
+			<br>Search Result <br> <br>
+			<table class="table table-sm" style="font-size: 13px;">
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">CIF</th>
+						<th scope="col">Citizen ID</th>
+						<th scope="col">Customer Name</th>
+						<th scope="col">Address</th>
+						<th scope="col">Status</th>
+						<th scope="col">View</th>
+					</tr>
+				</thead>
+				<tr th:each="customer : ${customers}">
+					<td><a class="linkCust" data-toggle="modal"
+						data-target="#ModalCust" href=""
+						th:attr="data-href=${customer.cifNo}"><span
+							th:text="${customer.cifNo}"></span></a></td>
+					<td><span th:text="${customer.citizenId}"></span></td>
+					<td><span
+						th:text="${customer.firstNameTh+' '+customer.lastNameTh}"></span></td>
+					<td><span th:text="${customer.wkAddrNo}"></span></td>
+					<td>Active</td>
+					<td><a class="linkAcct" data-toggle="modal"
+						data-target="#ModalAcct" href=""
+						th:attr="data-href=${customer.cifNo}">view account</a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+    
+	<!-- <div class="container">
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-4">
 			<div style="padding-left: 100px;">
-				<br>Customer Search <br>
-				<br>
+				<br>Customer Search <br> <br>
 				<form method="GET" action="./customer">
 					<table>
-
 						<tr>
 							<td>CIF</td>
 							<td><input type="text" class="form-control small"
@@ -37,40 +127,90 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td><br>
-							<input type="submit" class="btn btn-success btn-sm"
-								value="Search"> <input type="button"
-								class="btn btn-success btn-sm" value="Clear"></td>
+							<td><br> <input type="submit"
+								class="btn btn-success btn-sm" value="Search"> <input
+								type="button" class="btn btn-success btn-sm" value="Clear"></td>
 						</tr>
 					</table>
 				</form>
 			</div>
+			
 		</div>
-
-		<div style="padding-left: 100px; width: 85%;">
-			Search Result <br> <br>
-			<table class="table table-sm">
-				<thead class="thead-light">
-					<tr>
-						<th scope="col">CIF</th>
-						<th scope="col">Citizen ID</th>
-						<th scope="col">Customer Name</th>
-						<th scope="col">Address</th>
-						<th scope="col">Status</th>
-						<th scope="col">View</th>
+		<div class="col-sm-8" style="padding-left: 100px; width: 85%;">
+				Search Result <br> <br>
+				<table class="table table-sm"
+					style="font-size: 13px;">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col">CIF</th>
+							<th scope="col">Citizen ID</th>
+							<th scope="col">Customer Name</th>
+							<th scope="col">Address</th>
+							<th scope="col">Status</th>
+							<th scope="col">View</th>
+						</tr>
+					</thead>
+					<tr th:each="customer : ${customers}">
+						<td><a class="linkCust" data-toggle="modal"
+							data-target="#ModalCust" href=""
+							th:attr="data-href=${customer.cifNo}"><span
+								th:text="${customer.cifNo}"></span></a></td>
+						<td><span th:text="${customer.citizenId}"></span></td>
+						<td><span
+							th:text="${customer.firstNameTh+' '+customer.lastNameTh}"></span></td>
+						<td><span th:text="${customer.wkAddrNo}"></span></td>
+						<td>Active</td>
+						<td><a class="linkAcct" data-toggle="modal"
+							data-target="#ModalAcct" href=""
+							th:attr="data-href=${customer.cifNo}">view account</a></td>
 					</tr>
-				</thead>
-				<tr th:each="customer : ${customers}">
-					<td><span th:text="${customer.cifNo}"></span></td>
-					<td><span th:text="${customer.citizenId}"></span></td>
-					<td><span
-						th:text="${customer.firstNameTh+' '+customer.lastNameTh}"></span></td>
-					<td><span th:text="${customer.wkAddrNo}"></span></td>
-					<td>Active</td>
-					<td>view account</td>
-				</tr>
-			</table>
+				</table>
+			</div>
+	</div>
+	</div> -->
+
+	<!-- Modal Customer-->
+	<div class="modal" id="ModalCust" tabindex="-10" role="dialog"
+		aria-labelledby="customerModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="customerModalLabel">Customer
+						information</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+				</div>
+			</div>
 		</div>
 	</div>
+	<!--End Modal Customer-->
+
+	<!-- Modal Account-->
+	<div class="modal" id="ModalAcct" tabindex="-10" role="dialog"
+		aria-labelledby="customerModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="customerModalLabel">Account
+						information</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--End Modal Account-->
 </body>
 </html>
