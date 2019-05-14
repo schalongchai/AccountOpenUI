@@ -49,6 +49,13 @@ public class CustomerController {
 		}else {
 			model.addAttribute("response", "Customer not found!");
 		}
+		
+		model.addAttribute("cif", cif);
+		model.addAttribute("fname", fname);
+		model.addAttribute("lname", lname);
+		model.addAttribute("citizen", citizen);
+		model.addAttribute("acctno", acctno);
+		
 		return "customer/custsearch";
 	}
 
