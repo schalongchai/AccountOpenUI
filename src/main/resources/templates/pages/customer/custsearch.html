@@ -4,7 +4,7 @@
 	$(document).ready(function() {
 		$('.linkAcct').on('click', function() {
 			var id = $(this).attr('data-href');
-			$('.modal-body').load('/customerinfo?cif=' + id, function() {
+			$('.modal-body').load('/accountinfo?cif=' + id, function() {
 				$('#ModalAcct').modal({
 					show : true
 				});
