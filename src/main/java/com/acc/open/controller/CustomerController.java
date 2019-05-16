@@ -39,7 +39,7 @@ public class CustomerController {
 			@RequestParam("fname") String fname,
 			@RequestParam("lname") String lname,
 			@RequestParam("citizen") String citizen,
-			@RequestParam("acctno") String acctno,
+			@RequestParam(required = false) String acctno,
 			ModelMap model) {
 		
 		List<AoCustomerInfo> c = cs.getCustomerSearch(cif,fname,lname,citizen,acctno);
