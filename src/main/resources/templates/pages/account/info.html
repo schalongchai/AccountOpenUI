@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Customer Information</title>
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+<script src="./js/bootstrap.min.js"></script>
+</head>
+</head>
+<body>
+<div >
+		<table style="font-size: 12px;" class="table table-sm">
+			<thead class="thead-light" style="background-color:rgb(40, 167, 69);color:white;">
+				<tr>
+					<td scope="col">Account no</td>
+					<td scope="col">Type</td>
+					<td scope="col" style="text-align: right; padding-right: 20px;">Balance (Baht)</td>
+					<td scope="col" style="text-align: right; padding-right: 20px;">Interest rate(%)</td>
+					<td scope="col">Passbook no</td>
+					<td scope="col" style="text-align: right;">Branch</td>
+				</tr>
+			</thead>
+			<tr th:each="account : ${accounts}">
+				<td><span
+						th:text="${#strings.defaultString(account.id.acNo,'')}"></span></td>
+				<td><span
+						th:text="${#strings.defaultString(account.accountType,'')}"></span></td>
+				<td style="text-align: right; padding-right: 20px;">
+					<span
+						th:text="${#numbers.formatDecimal(account.balance, 0, 'COMMA', 2, 'POINT')}"></span></td>
+				<td style="text-align: right; padding-right: 20px;">
+					<span
+						th:text="${#strings.defaultString(account.acIntrate,'')}"></span></td>
+				<td><span
+						th:text="${#strings.defaultString(account.acPassbookNo,'')}"></span></td>
+				<td style="text-align: right;"><span
+						th:text="${#strings.defaultString(account.acBrno,'')}"></span></td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

@@ -44,6 +44,18 @@ public class AoAccountInfo  {
 
 	private String productType;
 	
+	
+	private BigDecimal balance;
+	
+	public final BigDecimal getBalance() {
+		return balance;
+	}
+
+	public final void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+
+	
 	public AoAccountInfo() {
 	}
 
