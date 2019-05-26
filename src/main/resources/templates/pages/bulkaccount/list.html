@@ -3,16 +3,17 @@
 	<div th:replace="../fragments/header_login.html :: header_login"></div>
 	<div style="padding-left: 100px;">
 		<br>Bulk Account opening <br>
-			<div class="d-flex flex-wrap justify-content-end" style="padding-right:15%;">
-			
+		<div class="d-flex flex-wrap justify-content-end"
+			style="padding-right: 15%;">
+			<div>
 				<form method="POST" action="./bulkupload">
-					<span class="btn btn-success btn-file btn-sm">Upload<input
-							type="file" onchange="this.form.submit()" name="bulkfile">
-					</span>
-					
+					<label class="btn btn-success btn-sm"> Upload <input
+						type="file" hidden onchange="this.form.submit()" name="bulkfile">
+					</label>
 				</form>
-				
-				<div>	
+
+			</div>
+			<div>
 				<input type="button" value="Delete" class="btn btn-danger btn-sm"></input>
 			</div>
 			<div>
@@ -20,12 +21,9 @@
 			</div>
 			<div>
 				<input type="button" value="Account Creation" class="btn btn-warning btn-sm"></input>
-			</div>	
-				
 			</div>
-			
-		
-		
+
+		</div>
 		<br>
 		<table class="table table-sm" style="width: 85%;font-size:13px;">
 
