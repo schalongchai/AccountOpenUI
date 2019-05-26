@@ -3,17 +3,29 @@
 	<div th:replace="../fragments/header_login.html :: header_login"></div>
 	<div style="padding-left: 100px;">
 		<br>Bulk Account opening <br>
-		<table style="width: 85%">
-			<tr>
-				<td colspan="9" align="right"><input type="button"
-					value="Upload" class="btn btn-success btn-sm"></input> <input
-					type="button" value="Delete" class="btn btn-danger btn-sm"></input>
-					<input type="button" value="Validate"
-					class="btn btn-primary btn-sm"></input> <input type="button"
-					value="Account Creation" class="btn btn-warning btn-sm"></input></td>
-
-			</tr>
-		</table>
+			<div class="d-flex flex-wrap justify-content-end" style="padding-right:15%;">
+			
+				<form method="POST" action="./bulkupload">
+					<span class="btn btn-success btn-file btn-sm">Upload<input
+							type="file" onchange="this.form.submit()" name="bulkfile">
+					</span>
+					
+				</form>
+				
+				<div>	
+				<input type="button" value="Delete" class="btn btn-danger btn-sm"></input>
+			</div>
+			<div>
+				<input type="button" value="Validate" class="btn btn-primary btn-sm"></input>
+			</div>
+			<div>
+				<input type="button" value="Account Creation" class="btn btn-warning btn-sm"></input>
+			</div>	
+				
+			</div>
+			
+		
+		
 		<br>
 		<table class="table table-sm" style="width: 85%;font-size:13px;">
 
@@ -30,35 +42,20 @@
 					<th scope="col">Remark</th>
 				</tr>
 			</thead>
-			<tr>
+			<tr th:each="bulkfile : ${bulkfiles}">
 				<td><div class="custom-control custom-checkbox">
 						<input type="checkbox" class="custom-control-input"
-							id="defaultUnchecked1"> <label
-							class="custom-control-label" for="defaultUnchecked1"></label>
+							th:attr="id=${bulkfile.id}"> <label
+							class="custom-control-label" th:attr="for=${bulkfile.id}"></label>
 					</div></td>
-				<td>BULK_ACT_20191010.txt</td>
-				<td>25</td>
-				<td>25</td>
-				<td>0</td>
-				<td>1</td>
-				<td>24</td>
-				<td>Waiting process</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input"
-							id="defaultUnchecked2"> <label
-							class="custom-control-label" for="defaultUnchecked2"></label>
-					</div></td>
-				<td>BULK_ACT_20191011.txt</td>
-				<td>30</td>
-				<td>30</td>
-				<td>0</td>
-				<td>1</td>
-				<td>30</td>
-				<td>Done</td>
-				<td></td>
+				<td><span th:text="${bulkfile.fileName}"></span></td>
+				<td><span th:text="${bulkfile.totalRec}"></span></td>
+				<td><span th:text="${bulkfile.totalPassed}"></span></td>
+				<td><span th:text="${bulkfile.totalFailed}"></span></td>
+				<td><span th:text="${bulkfile.totalRejected}"></span></td>
+				<td><span th:text="${bulkfile.totalCompleted}"></span></td>
+				<td><span th:text="${bulkfile.getAoStatusFile().getCode()}"></span></td>
+				<td><span th:text="${bulkfile.getAoStatusFile().getStatusDesc()}"></span></td>
 			</tr>
 		</table>
 	</div>

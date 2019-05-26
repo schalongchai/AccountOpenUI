@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.acc.open.model.AoAccountInfo;
+import com.acc.open.model.AoBulkFile;
 import com.acc.open.service.AccountService;
+import com.acc.open.service.BulkService;
 import com.acc.open.service.LogingService;
 
 @Controller
@@ -23,9 +25,14 @@ public class AccountController {
 	@Autowired
 	private AccountService cs;
 	
+	@Autowired
+	private BulkService bs;
+	
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
 	public String account(ModelMap model,HttpServletRequest request) {
+		List<AoBulkFile> bo = bs.getAllBulks();
 		model.addAttribute("tabActive","Account");
+		model.addAttribute("bulkfiles", bo);
 		return "bulkaccount/list";
 		
 	}

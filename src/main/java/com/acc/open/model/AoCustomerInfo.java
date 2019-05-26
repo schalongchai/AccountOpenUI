@@ -1,8 +1,6 @@
 package com.acc.open.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.Date;
 
 
