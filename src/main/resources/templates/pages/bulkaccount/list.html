@@ -6,9 +6,9 @@
 		<div class="d-flex flex-wrap justify-content-end"
 			style="padding-right: 15%;">
 			<div>
-				<form method="POST" action="./bulkupload">
+				<form method="POST" action="./bulkupload" enctype="multipart/form-data">
 					<label class="btn btn-success btn-sm"> Upload <input
-						type="file" hidden onchange="this.form.submit()" name="bulkfile">
+						type="file" hidden="" onchange="this.form.submit()" name="bulkfile">
 					</label>
 				</form>
 
