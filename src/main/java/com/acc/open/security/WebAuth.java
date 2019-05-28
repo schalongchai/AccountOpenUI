@@ -7,12 +7,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.acc.open.service.AppUserDetailsService;
+import com.acc.open.service.MyAppUserDetailsService;
 
 @Configuration
 public class WebAuth extends WebSecurityConfigurerAdapter {
 	@Autowired
-	private AppUserDetailsService customAppUserDetailsService;
+	private MyAppUserDetailsService customAppUserDetailsService;
 	
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

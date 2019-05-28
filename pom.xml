@@ -11,7 +11,7 @@
 	<groupId>com.acc.open</groupId>
 	<artifactId>AccountOpenUI</artifactId>
 	<version>SP</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>AccountOpenUI</name>
 	<description>Demo project for Spring Boot</description>
 

@@ -10,7 +10,7 @@ import com.acc.open.model.AoUser;
 import com.acc.open.service.LogingService;
 
 @Service
-public class AppUserDetailsService implements UserDetailsService {
+public class MyAppUserDetailsService implements UserDetailsService {
 	@Autowired
 	private LogingService loginService;
 
