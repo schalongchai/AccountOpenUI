@@ -24,9 +24,11 @@ public class BulkController {
 	
 	@RequestMapping(value = "/bulkupload", method = RequestMethod.POST)
 	public String account(ModelMap model,@RequestParam("bulkfile") MultipartFile file) {
-		AoBulkFile a = bs.readFile(file);
-		if(a!=null) {
-		 bs.addBulkFile(a);
+		List<AoBulkFile> bulkFiles = bs.readFile(file);
+		if(!bulkFiles.isEmpty()) {
+			for(int i=0;i<bulkFiles.size();i++) {
+				bs.addBulkFile(bulkFiles.get(i));
+			}
 		}
 		List<AoBulkFile> bo = bs.getAllBulks();
 		model.addAttribute("tabActive","Account");

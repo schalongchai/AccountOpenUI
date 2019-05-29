@@ -1,5 +1,6 @@
 package com.acc.open.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -52,20 +53,29 @@ public class BulkService {
 	}
 	
 	
-	public AoBulkFile readFile(MultipartFile file) {
-		 AoBulkFile a = null;
+	public List<AoBulkFile> readFile(MultipartFile file) {
+		 List<AoBulkFile> bulkFiles = new ArrayList<>();
+		 AoBulkFile bulkfile = null;
 		 if (!file.isEmpty()) {
 		        try {
 		            byte[] bytes = file.getBytes();
 		            String data = new String(bytes);
-		            a = new  ObjectMapper().readValue(data, AoBulkFile.class);
+		            //Each entry must end with Semicolon ;
+		            //Split data for each line.
+		            String[] lineOfData = data.split(";");
+		            for(int i = 0; i< lineOfData.length ; i++ ) {
+		               bulkfile = new  ObjectMapper().readValue(lineOfData[i], AoBulkFile.class);
+		               if(bulkfile!=null) {
+		            	   bulkFiles.add(bulkfile);
+		               }
+		            }
 		        }
 		        catch (Exception e) {
 		        	
 		        }
 
 		 }
-		 return a;
+		 return bulkFiles;
 	
 	}
 }
