@@ -1,4 +1,18 @@
 <div th:replace="../fragments/header_login.html :: header_include"></div>
+<script>
+$(document).ready(function() {
+    $('#Btndelete').click(function(){  	
+        var deleteId = [];
+        $.each($("input[name='bulkChk']:checked"), function(){            
+        	deleteId.push($(this).attr('id'));
+        });
+        
+        $('#deleteItems').val(deleteId.join(", "));
+       	$(this).closest("form").submit();
+   	   	
+  });
+});
+</script>
 <body>
 	<div th:replace="../fragments/header_login.html :: header_login"></div>
 	<div style="padding-left: 100px;">
@@ -14,13 +28,16 @@
 
 			</div>
 			<div>
-				<input type="button" value="Delete" class="btn btn-danger btn-sm"></input>
+				<form id="deleteForm" method="POST" action="./bulkdelete" >
+					<input type="hidden" id = "deleteItems" name = "deleteItems"></input>
+					<input type="button" id = "Btndelete" value="Delete" class="btn btn-danger btn-sm"></input>
+				</form>
 			</div>
 			<div>
-				<input type="button" value="Validate" class="btn btn-primary btn-sm"></input>
+				<input type="button" id = "BtnValidate" value="Validate" class="btn btn-primary btn-sm"></input>
 			</div>
 			<div>
-				<input type="button" value="Account Creation" class="btn btn-warning btn-sm"></input>
+				<input type="button" id = "BtnAcctCreate" value="Account Creation" class="btn btn-warning btn-sm"></input>
 			</div>
 
 		</div>
@@ -42,8 +59,8 @@
 			</thead>
 			<tr th:each="bulkfile : ${bulkfiles}">
 				<td><div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input"
-							th:attr="id=${bulkfile.id}"> <label
+						<input type="checkbox" class="custom-control-input" name="bulkChk"
+							th:attr="id=${bulkfile.id}" > <label
 							class="custom-control-label" th:attr="for=${bulkfile.id}"></label>
 					</div></td>
 				<td><span th:text="${bulkfile.fileName}"></span></td>

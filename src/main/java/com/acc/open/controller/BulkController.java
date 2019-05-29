@@ -37,4 +37,20 @@ public class BulkController {
 		
 	}
 	
+	@RequestMapping(value = "/bulkdelete", method = RequestMethod.POST)
+	public String account(ModelMap model,@RequestParam("deleteItems") String items) {
+		if(!items.equals(null)) {
+			String[] deleteItems = items.split(",");
+			if(deleteItems.length>0 && !deleteItems[0].equals("")) {
+			  bs.deleteBulkFiles(deleteItems);
+			}
+		}
+		
+		List<AoBulkFile> bo = bs.getAllBulks();
+		model.addAttribute("tabActive","Account");
+		model.addAttribute("bulkfiles", bo);
+		return "bulkaccount/list";
+		
+	}
+	
 }

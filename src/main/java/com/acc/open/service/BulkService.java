@@ -1,7 +1,10 @@
 package com.acc.open.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -12,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.acc.open.model.AoBulkFile;
+import com.acc.open.model.AoCustomerInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -47,8 +51,6 @@ public class BulkService {
 		} catch (HttpClientErrorException e) {
 			
 		}
-		
-
 
 	}
 	
@@ -77,5 +79,26 @@ public class BulkService {
 		 }
 		 return bulkFiles;
 	
+	}
+	
+	public void deleteBulkFiles(String[] id)
+	{
+		final String uri = restURI + "/api/bulkfiles/{id}";
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			Map<String, String> params = new HashMap<String, String>();
+			for (int i = 0; i < id.length; i++) {
+				params.put("id", id[i]);
+				ResponseEntity<AoBulkFile> response = restTemplate.exchange(uri, HttpMethod.DELETE, null,
+						new ParameterizedTypeReference<AoBulkFile>() {
+						}, params);
+				
+				response.getBody();
+
+			}
+		} catch (HttpClientErrorException e) {
+
+		}
+
 	}
 }
