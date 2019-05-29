@@ -1,16 +1,58 @@
 <div th:replace="../fragments/header_login.html :: header_include"></div>
 <script>
 $(document).ready(function() {
-    $('#Btndelete').click(function(){  	
-        var deleteId = [];
-        $.each($("input[name='bulkChk']:checked"), function(){            
-        	deleteId.push($(this).attr('id'));
-        });
-        
-        $('#deleteItems').val(deleteId.join(", "));
-       	$(this).closest("form").submit();
-   	   	
-  });
+   
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        	
+            var deleteId = [];
+            $.each($("input[name='bulkChk']:checked"), function(){            
+            	deleteId.push($(this).attr('id'));
+            });
+            
+            $('#deleteItems').val(deleteId.join(", "));
+            if(deleteId.length==0){
+            	$('#buttonCancel').text("OK")
+            	$('#buttonDelete').hide()
+             	$('.modal-header').html("<h5>Confirm delete.</h5>")
+            	$('.modal-body').text('Please select item to delete', function() {
+    				$('#confirm-delete').modal({
+    					show : true
+    				});
+    			});
+            	
+            }else if(deleteId.length==1){
+            	$('#buttonDelete').show()
+            	$('#buttonCancel').text("Cancel")
+            	$('.modal-header').html("<h5>Delete item</h5>")
+            	$('#buttonDelete').prop("onclick", null).off("click");
+            	$('#buttonDelete').click(function() {
+            		$('#deleteForm').submit();
+				});
+            	$('.modal-body').text('Are you sure you want to delete this bulk file?', function() {
+    				$('#confirm-delete').modal({
+    					show : true
+    				});
+    			});
+            	
+            }else if(deleteId.length>1){
+            	$('#buttonDelete').show()
+            	$('#buttonCancel').text("Cancel")
+            	$('.modal-header').html("<h5>Delete multiple items</h5>")
+            	$('#buttonDelete').prop("onclick", null).off("click");
+            	$('#buttonDelete').click(function() {
+            		$('#deleteForm').submit();
+				});
+            	$('.modal-body').text('Are you sure you want to delete these bulk file?', function() {
+    				$('#confirm-delete').modal({
+    					show : true
+    				});
+    			});
+            }
+            //$(this).closest("form").submit();
+           	
+           	
+           
+    });
 });
 </script>
 <body>
@@ -30,7 +72,9 @@ $(document).ready(function() {
 			<div>
 				<form id="deleteForm" method="POST" action="./bulkdelete" >
 					<input type="hidden" id = "deleteItems" name = "deleteItems"></input>
-					<input type="button" id = "Btndelete" value="Delete" class="btn btn-danger btn-sm"></input>
+<!-- 					<input type="button" id = "Btndelete" value="Delete" class="btn btn-danger btn-sm"></input> -->
+					<a href="#" class="btn btn-danger btn-sm" data-href="delete.php?id=23" data-toggle="modal" data-target="#confirm-delete">Delete</a>
+					
 				</form>
 			</div>
 			<div>
@@ -74,5 +118,22 @@ $(document).ready(function() {
 			</tr>
 		</table>
 	</div>
+	
+	<div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Delete items</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete these bulk files?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="buttonCancel">Cancel</button>
+                <a class="btn btn-danger btn-ok" id="buttonDelete" >OK</a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
