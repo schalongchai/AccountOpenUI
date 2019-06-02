@@ -1,9 +1,9 @@
 package com.acc.open.model;
 
 import java.io.Serializable;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
 
 /**
  * The persistent class for the AO_BULK_DETAIL database table.
@@ -11,41 +11,139 @@ import java.util.Date;
  */
 
 public class AoBulkDetail implements Serializable {
-	private static final long serialVersionUID = 1L;
 
+	private AoBulkFile aoBulkFile;
+	
+	private Long id_detail;
+	
+	private Long id_file;
+    
+	private Long seq;
 
-	private Long id;
-
-
-	private String acBranch;
-
+    private String acBranch;
 
 	private BigDecimal acNo;
 
-
 	private String acOpenType;
-
 
 	private Date acOpendate;
 
-
 	private String acProductType;
-
 
 	private String acStatus;
 
-	
 	private BigDecimal amountIncome;
-
 
 	private Date birthDate;
 
-
 	private BigDecimal cifNo;
-	
 
 	private BigDecimal citizenID;
-	
+
+	private String customerType;
+
+	private String documentType;
+
+	private Date expireDate;
+
+	private String firstNameEn;
+
+	private String firstNameTh;
+
+	private String homeExt;
+
+	private String homeNumber;
+
+	private String invValField;
+
+	private Date issueDate;
+
+	private String lastNameEn;
+
+	private String lastNameTh;
+
+	private String midleNameEn;
+
+	private String midleNameTh;
+
+	private String missingField;
+
+	private String mobileNumber;
+
+	private String nationality;
+
+	private String occupation;
+
+	private String offExt;
+
+	private String offNumber;
+
+	private String prefixEn;
+
+	private String prefixTh;
+
+	private String reqFieldPassed;
+
+	private String sourceIncome;
+
+	private String valFieldPassed;
+
+	private String wkAddrCountry;
+
+	private String wkAddrDisctict;
+
+	private String wkAddrMoo;
+
+	private String wkAddrNo;
+
+	private BigDecimal wkAddrPostcode;
+
+	private String wkAddrProvince;
+
+	private String wkAddrRoad;
+
+	private String wkAddrSoi;
+
+	private String wkAddrSubdisct;
+
+	private String wkCompName;
+
+	private String wkPosition;
+
+	public final AoBulkFile getAoBulkFile() {
+		return aoBulkFile;
+	}
+
+	public final void setAoBulkFile(AoBulkFile aoBulkFile) {
+		this.aoBulkFile = aoBulkFile;
+	}
+
+	private static final long serialVersionUID = 1L;
+
+	public Long getId_detail() {
+		return id_detail;
+	}
+
+	public void setId_detail(Long id_detail) {
+		this.id_detail = id_detail;
+	}
+
+	public Long getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Long seq) {
+		this.seq = seq;
+	}
+
+	public final Long getId_file() {
+		return id_file;
+	}
+
+	public final void setId_file(Long id_file) {
+		this.id_file = id_file;
+	}
+
 	public final BigDecimal getCitizenID() {
 		return citizenID;
 	}
@@ -54,118 +152,9 @@ public class AoBulkDetail implements Serializable {
 		this.citizenID = citizenID;
 	}
 
-
-	private String customerType;
-
-
-	private String documentType;
-
-
-	private Date expireDate;
-
-
-	private String firstNameEn;
-
-
-	private String firstNameTh;
-
-
-	private String homeExt;
-
-
-	private String homeNumber;
-
-
-	private String invValField;
-
-
-	private Date issueDate;
-
-
-	private String lastNameEn;
-
-
-	private String lastNameTh;
-
-
-	private String midleNameEn;
-
-
-	private String midleNameTh;
-
-	private String missingField;
-
-
-	private String mobileNumber;
-
-	private String nationality;
-
-	private String occupation;
-
-
-	private String offExt;
-
-
-	private String offNumber;
-
-
-	private String prefixEn;
-
-
-	private String prefixTh;
-
-
-	private String reqFieldPassed;
-
-
-	private String sourceIncome;
-
-
-	private String valFieldPassed;
-
-
-	private String wkAddrCountry;
-
-
-	private String wkAddrDisctict;
-
-
-	private String wkAddrMoo;
-
-
-	private String wkAddrNo;
-
-
-	private BigDecimal wkAddrPostcode;
-
-
-	private String wkAddrProvince;
-
-
-	private String wkAddrRoad;
-
-
-	private String wkAddrSoi;
-
-
-	private String wkAddrSubdisct;
-
-
-	private String wkCompName;
-
-
-	private String wkPosition;
-
 	public AoBulkDetail() {
 	}
 
-	public Long getId() {
-		return this.id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getAcBranch() {
 		return this.acBranch;

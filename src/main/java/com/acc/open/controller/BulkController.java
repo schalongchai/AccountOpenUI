@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.acc.open.model.AoBulkDetail;
 import com.acc.open.model.AoBulkFile;
 import com.acc.open.service.BulkService;
 import com.acc.open.service.LogingService;
@@ -24,10 +25,13 @@ public class BulkController {
 	
 	@RequestMapping(value = "/bulkupload", method = RequestMethod.POST)
 	public String account(ModelMap model,@RequestParam("bulkfile") MultipartFile file) {
-		List<AoBulkFile> bulkFiles = bs.readFile(file);
-		if(!bulkFiles.isEmpty()) {
-			for(int i=0;i<bulkFiles.size();i++) {
-				bs.addBulkFile(bulkFiles.get(i));
+		List<AoBulkDetail> bulkFileDetails = bs.readFile(file);
+		
+		if(!bulkFileDetails.isEmpty()) {
+			AoBulkFile bulkFile = bs.extractBulkFileHeader(file.getOriginalFilename(), bulkFileDetails);
+			bs.addBulkFile(bulkFile);
+			for(int i=0;i<bulkFileDetails.size();i++) {
+				bs.addBulkDetailFile(bulkFileDetails.get(i),bulkFileDetails.get(i).getId_file());
 			}
 		}
 		List<AoBulkFile> bo = bs.getAllBulks();
