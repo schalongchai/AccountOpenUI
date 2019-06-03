@@ -28,7 +28,7 @@
 						th:text="${#strings.defaultString(account.accountType,'')}"></span></td>
 				<td style="text-align: right; padding-right: 20px;">
 					<span
-						th:text="${#numbers.formatDecimal(account.balance, 0, 'COMMA', 2, 'POINT')}"></span></td>
+						th:text="${#numbers.formatDecimal(account.balance,1, 'COMMA', 2, 'POINT')}"></span></td>
 				<td style="text-align: right; padding-right: 20px;">
 					<span
 						th:text="${#strings.defaultString(account.acIntrate,'')}"></span></td>

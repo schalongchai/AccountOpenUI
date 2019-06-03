@@ -11,13 +11,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.acc.open.model.AoAccountInfo;
+import com.acc.open.model.AoAccountInfoPK;
 import com.acc.open.model.AoBulkDetail;
 import com.acc.open.model.AoBulkFile;
 import com.acc.open.model.AoStatusFile;
@@ -47,6 +52,22 @@ public class BulkService {
 
 		return bulkFile;
 	}
+	
+	public AoBulkFile getBulkFileById(String id) {
+		AoBulkFile bulkFile = null;
+		final String uri = restURI + "/api/bulkfiles/{id}";
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			 Map<String, String> params = new HashMap<String, String>();
+			    params.put("id", id);
+			    ResponseEntity<AoBulkFile> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<AoBulkFile>(){},params);
+			    bulkFile = response.getBody();
+		} catch (HttpClientErrorException e) {
+
+		}
+
+		return bulkFile;
+	}
 
 	public void addBulkDetailFile(AoBulkDetail bulkfile, Long id_file) {
 		final String uri = restURI + "/api/bulkfiles/" + id_file.toString() + "/files/";
@@ -67,6 +88,25 @@ public class BulkService {
 
 		} catch (HttpClientErrorException e) {
 
+		}
+
+	}
+	
+	public void updateBulkFile(AoBulkFile bulkfile,String statusCode) {
+		final String uri = restURI + "/api/bulkfiles/";
+		AoStatusFile aoStatusFile = new AoStatusFile();
+		aoStatusFile.setCode(statusCode);
+		bulkfile.setAoStatusFile(aoStatusFile);
+		try {
+			 	Map<String, String> param = new HashMap<String, String>();
+			 	HttpHeaders headers = new HttpHeaders();
+			 
+			    HttpEntity<AoBulkFile> requestEntity = new HttpEntity<AoBulkFile>(bulkfile, headers);
+			    RestTemplate restTemplate = new RestTemplate();
+				restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, AoBulkFile.class, param);
+		
+		} catch (HttpClientErrorException e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -133,5 +173,97 @@ public class BulkService {
 
 		}
 
+	}
+	
+	public AoBulkFile CreateAccountBulkFiles(String[] id) {
+		final String uri = restURI + "/api/bulkfiles/{id}/files/";
+		List<AoBulkDetail> bulkDetails = new ArrayList<AoBulkDetail>();
+		AoBulkFile aoFileResult = new AoBulkFile();
+		int errorCount = 0;
+		int successCount = 0;
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			Map<String, String> params = new HashMap<String, String>();
+			for (int i = 0; i < id.length; i++) {
+				params.put("id", id[i]);
+				ResponseEntity<List<AoBulkDetail>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+						new ParameterizedTypeReference<List<AoBulkDetail>>() {
+						}, params);
+
+				// Loop create accounts for each files
+				bulkDetails = response.getBody();
+				
+				successCount = 0;
+				errorCount = 0;
+				
+				for (int j = 0; j < bulkDetails.size(); j++) {
+					HttpStatus stat = createAccount(bulkDetails.get(j));
+					if (stat.equals(HttpStatus.OK)) {
+						successCount = successCount + 1;
+					} else {
+						errorCount = errorCount + 1;
+					}
+				}
+
+				aoFileResult = bulkDetails.get(0).getAoBulkFile();
+
+				Date curDate = new Date();
+				aoFileResult.setProcessDate(curDate);
+				aoFileResult.setApprovedBy(String.valueOf(loginService.getUserLogin().getUserId()));
+				aoFileResult.setTotalRejected(new BigDecimal(errorCount));
+				aoFileResult.setTotalCompleted(new BigDecimal(successCount));
+				
+				
+				if(errorCount==0) {
+					updateBulkFile(aoFileResult, "03"); // Success
+				}else if(errorCount>0) {
+					updateBulkFile(aoFileResult, "04"); // process with error
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return aoFileResult;
+	}
+	
+	private HttpStatus createAccount(final AoBulkDetail b) {
+		
+		HttpStatus status = HttpStatus.OK;
+		try {
+
+			final String uri = restURI + "/api/customers/" + b.getCifNo().toString() + "/accounts/";
+			RestTemplate restTemplate = new RestTemplate();
+
+			AoAccountInfo a = new AoAccountInfo();
+			AoAccountInfoPK ap = new AoAccountInfoPK();
+			ap.setAcNo((Long.parseLong(b.getAcNo().toString())));
+			ap.setCifNo(Long.parseLong(b.getCifNo().toString()));
+			a.setId(ap);
+
+			a.setAcBrno(b.getAcBranch());
+			a.setAcIntrate(new BigDecimal(0.75));//
+
+			Date curDate = new Date();
+			a.setAcOpendate(curDate);
+			a.setAcPassbookNo(b.getAcBranch() + "-" + b.getAcNo().toString().substring(0, 5)); // Using brcd - acct no
+			a.setAcRestFlag("1");
+			a.setAcStatus("0");
+			a.setAccountType(b.getAcProductType()); // default to SAV
+			a.setAtmNumber(""); // Branch + account no
+			a.setClosedDate(null);
+			a.setProductType(b.getAcProductType());
+			a.setBalance(BigDecimal.ZERO);
+			restTemplate.postForEntity(uri, a, AoAccountInfo.class);
+
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+				e.printStackTrace();
+			}
+
+			status = e.getStatusCode();
+		}
+		return status;
 	}
 }

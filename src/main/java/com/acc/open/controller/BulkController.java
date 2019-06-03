@@ -21,57 +21,73 @@ import com.acc.open.service.LogingService;
 public class BulkController {
 	@Autowired
 	LogingService loginService;
-	
+
 	@Autowired
 	private BulkService bs;
-	
+
 	@RequestMapping(value = "/bulkupload", method = RequestMethod.POST)
-	public String account(ModelMap model,@RequestParam("bulkfile") MultipartFile file) {
+	public String account(ModelMap model, @RequestParam("bulkfile") MultipartFile file) {
 		List<AoBulkDetail> bulkFileDetails = new ArrayList<AoBulkDetail>();
-		String msgError="";
+		String msgError = "";
 		try {
 			bulkFileDetails = bs.readFile(file);
 		} catch (IOException e) {
 			e.printStackTrace();
-			msgError= e.getMessage();
+			msgError = e.getMessage();
 		}
-		
-		if(!bulkFileDetails.isEmpty()) {
+
+		if (!bulkFileDetails.isEmpty()) {
 			AoBulkFile bulkFile = bs.extractBulkFileHeader(file.getOriginalFilename(), bulkFileDetails);
 			bs.addBulkFile(bulkFile);
-			for(int i=0;i<bulkFileDetails.size();i++) {
-				bs.addBulkDetailFile(bulkFileDetails.get(i),bulkFileDetails.get(i).getId_file());
+			for (int i = 0; i < bulkFileDetails.size(); i++) {
+				bs.addBulkDetailFile(bulkFileDetails.get(i), bulkFileDetails.get(i).getId_file());
 			}
 		}
 		List<AoBulkFile> bo = bs.getAllBulks();
-		if(!msgError.equals("")) {
-			msgError = "Error reading file : <b>"+ file.getOriginalFilename() + "</b>"
-		               +"^Cause : " + msgError; 
-			            // use ^ as newline character.
+		if (!msgError.equals("")) {
+			msgError = "Error reading file : <b>" + file.getOriginalFilename() + "</b>" + "^Cause : " + msgError;
+			// use ^ as newline character.
 			model.addAttribute("msgError", msgError);
-		}else {
-			model.addAttribute("msgSuccess", "Success uploaded file : <b>" + file.getOriginalFilename()+"</b>");
+		} else {
+			model.addAttribute("msgSuccess", "Success uploaded file : <b>" + file.getOriginalFilename() + "</b>");
 		}
-		model.addAttribute("tabActive","Account");
+		model.addAttribute("tabActive", "Account");
 		model.addAttribute("bulkfiles", bo);
 		return "bulkaccount/list";
-		
+
 	}
-	
+
 	@RequestMapping(value = "/bulkdelete", method = RequestMethod.POST)
-	public String account(ModelMap model,@RequestParam("deleteItems") String items) {
-		if(!items.equals(null)) {
+	public String accountDelete(ModelMap model, @RequestParam("deleteItems") String items) {
+		if (!items.equals(null)) {
 			String[] deleteItems = items.split(",");
-			if(deleteItems.length>0 && !deleteItems[0].equals("")) {
-			  bs.deleteBulkFiles(deleteItems);
+			if (deleteItems.length > 0 && !deleteItems[0].equals("")) {
+				bs.deleteBulkFiles(deleteItems);
 			}
 		}
-		
+
 		List<AoBulkFile> bo = bs.getAllBulks();
-		model.addAttribute("tabActive","Account");
+		model.addAttribute("tabActive", "Account");
 		model.addAttribute("bulkfiles", bo);
 		return "bulkaccount/list";
-		
+
 	}
+
+	@RequestMapping(value = "/bulkcreate", method = RequestMethod.POST)
+	public String accountCreate(ModelMap model, @RequestParam("acctItems") String items) {
+		
+		if (!items.equals(null)) {
+			String[] createitems = items.split(",");
+			if (createitems.length > 0 && !createitems[0].equals("")) {
+				bs.CreateAccountBulkFiles(createitems);
+			}
+		}
 	
+		List<AoBulkFile> bo = bs.getAllBulks();
+		model.addAttribute("tabActive", "Account");
+		model.addAttribute("bulkfiles", bo);
+		return "bulkaccount/list";
+
+	}
+
 }

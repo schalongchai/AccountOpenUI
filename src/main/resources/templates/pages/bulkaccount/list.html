@@ -48,11 +48,57 @@ $(document).ready(function() {
     				});
     			});
             }
-            //$(this).closest("form").submit();
-           	
-           	
-           
+            
     });
+    
+    $('#confirm-create').on('show.bs.modal', function(e) {
+    	
+        var createId = [];
+        $.each($("input[name='bulkChk']:checked"), function(){            
+        	createId.push($(this).attr('id'));
+        });
+        
+        $('#acctItems').val(createId.join(", "));
+        if(createId.length==0){
+        	$('#buttonCancel').text("OK")
+        	$('#buttonCreate').hide()
+         	$('.modal-header').html("<h5>Bulk Account create</h5>")
+        	$('.modal-body').text('Please select item to process', function() {
+				$('#confirm-create').modal({
+					show : true
+				});
+			});
+        	
+        }else if(createId.length==1){
+        	$('#buttonCreate').show()
+        	$('#buttonCancel').text("Cancel")
+        	$('.modal-header').html("<h5>Bulk Account create item</h5>")
+        	$('#buttonCreate').prop("onclick", null).off("click");
+        	$('#buttonCreate').click(function() {
+        		$('#createAcctForm').submit();
+			});
+        	$('.modal-body').text('Are you sure you want to process account creation for this bulk file?', function() {
+				$('#confirm-create').modal({
+					show : true
+				});
+			});
+        	
+        }else if(createId.length>1){
+        	$('#buttonCreate').show()
+        	$('#buttonCancel').text("Cancel")
+        	$('.modal-header').html("<h5>Bulk Account create multiple items</h5>")
+        	$('#buttonCreate').prop("onclick", null).off("click");
+        	$('#buttonCreate').click(function() {
+        		$('#createAcctForm').submit();
+			});
+        	$('.modal-body').text('Are you sure you want to process account creation for these bulk files?', function() {
+				$('#confirm-create').modal({
+					show : true
+				});
+			});
+        }
+        
+});
 });
 </script>
 <body>
@@ -72,16 +118,17 @@ $(document).ready(function() {
 			<div>
 				<form id="deleteForm" method="POST" action="./bulkdelete" >
 					<input type="hidden" id = "deleteItems" name = "deleteItems"></input>
-<!-- 					<input type="button" id = "Btndelete" value="Delete" class="btn btn-danger btn-sm"></input> -->
-					<a href="#" class="btn btn-danger btn-sm" data-href="delete.php?id=23" data-toggle="modal" data-target="#confirm-delete">Delete</a>
-					
+					<a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirm-delete">Delete</a>			
 				</form>
 			</div>
 			<div>
 				<input type="button" id = "BtnValidate" value="Validate" class="btn btn-primary btn-sm"></input>
 			</div>
 			<div>
-				<input type="button" id = "BtnAcctCreate" value="Create account" class="btn btn-warning btn-sm"></input>
+				<form id="createAcctForm" method="POST" action="./bulkcreate" >
+					<input type="hidden" id = "acctItems" name = "acctItems"></input>
+					<a href="#" class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#confirm-create">Create Account</a>			
+				</form>
 			</div>
 
 		</div>
@@ -124,22 +171,41 @@ $(document).ready(function() {
 			</tr>
 		</table>
 	</div>
+
+	<div class="modal" id="confirm-delete" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5>Delete items</h5>
+				</div>
+				<div class="modal-body">Are you sure you want to delete these
+					bulk files?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						id="buttonCancel">Cancel</button>
+					<a class="btn btn-danger btn-ok" id="buttonDelete">OK</a>
+				</div>
+			</div>
+		</div>
+	</div>
 	
-	<div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Delete items</h5>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete these bulk files?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="buttonCancel">Cancel</button>
-                <a class="btn btn-danger btn-ok" id="buttonDelete" >OK</a>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="modal" id="confirm-create" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5>Create account</h5>
+				</div>
+				<div class="modal-body">Are you sure you want to process account create of these
+					bulk files?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						id="buttonCancel">Cancel</button>
+					<a class="btn btn-warning btn-ok" id="buttonCreate">OK</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
