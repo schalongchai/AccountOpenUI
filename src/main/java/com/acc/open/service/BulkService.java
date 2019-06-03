@@ -25,6 +25,7 @@ import com.acc.open.model.AoAccountInfo;
 import com.acc.open.model.AoAccountInfoPK;
 import com.acc.open.model.AoBulkDetail;
 import com.acc.open.model.AoBulkFile;
+import com.acc.open.model.AoCustomerInfo;
 import com.acc.open.model.AoStatusFile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +37,9 @@ public class BulkService {
 
 	@Autowired
 	LogingService loginService;
+
+	@Autowired
+	CustomerService customerService;
 
 	public List<AoBulkFile> getAllBulks() {
 		List<AoBulkFile> bulkFile = null;
@@ -52,16 +56,18 @@ public class BulkService {
 
 		return bulkFile;
 	}
-	
+
 	public AoBulkFile getBulkFileById(String id) {
 		AoBulkFile bulkFile = null;
 		final String uri = restURI + "/api/bulkfiles/{id}";
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			 Map<String, String> params = new HashMap<String, String>();
-			    params.put("id", id);
-			    ResponseEntity<AoBulkFile> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<AoBulkFile>(){},params);
-			    bulkFile = response.getBody();
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("id", id);
+			ResponseEntity<AoBulkFile> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+					new ParameterizedTypeReference<AoBulkFile>() {
+					}, params);
+			bulkFile = response.getBody();
 		} catch (HttpClientErrorException e) {
 
 		}
@@ -69,42 +75,49 @@ public class BulkService {
 		return bulkFile;
 	}
 
-	public void addBulkDetailFile(AoBulkDetail bulkfile, Long id_file) {
+	public HttpStatus addBulkDetailFile(AoBulkDetail bulkfile, Long id_file) {
 		final String uri = restURI + "/api/bulkfiles/" + id_file.toString() + "/files/";
+		HttpStatus stat = HttpStatus.OK;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.postForEntity(uri, bulkfile, AoBulkDetail.class);
 		} catch (HttpClientErrorException e) {
-
+			if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+				stat = e.getStatusCode();
+			}
 		}
-
+		return stat;
 	}
 
-	public void addBulkFile(AoBulkFile bulkfile) {
+	public HttpStatus addBulkFile(AoBulkFile bulkfile) {
 		final String uri = restURI + "/api/bulkfiles/";
+		HttpStatus stat = HttpStatus.OK;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.postForEntity(uri, bulkfile, AoBulkFile.class);
 
 		} catch (HttpClientErrorException e) {
-
+			if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+				stat = e.getStatusCode();
+			}
 		}
+		return stat;
 
 	}
-	
-	public void updateBulkFile(AoBulkFile bulkfile,String statusCode) {
+
+	public void updateBulkFile(AoBulkFile bulkfile, String statusCode) {
 		final String uri = restURI + "/api/bulkfiles/";
 		AoStatusFile aoStatusFile = new AoStatusFile();
 		aoStatusFile.setCode(statusCode);
 		bulkfile.setAoStatusFile(aoStatusFile);
 		try {
-			 	Map<String, String> param = new HashMap<String, String>();
-			 	HttpHeaders headers = new HttpHeaders();
-			 
-			    HttpEntity<AoBulkFile> requestEntity = new HttpEntity<AoBulkFile>(bulkfile, headers);
-			    RestTemplate restTemplate = new RestTemplate();
-				restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, AoBulkFile.class, param);
-		
+			Map<String, String> param = new HashMap<String, String>();
+			HttpHeaders headers = new HttpHeaders();
+
+			HttpEntity<AoBulkFile> requestEntity = new HttpEntity<AoBulkFile>(bulkfile, headers);
+			RestTemplate restTemplate = new RestTemplate();
+			restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, AoBulkFile.class, param);
+
 		} catch (HttpClientErrorException e) {
 			e.printStackTrace();
 		}
@@ -119,11 +132,12 @@ public class BulkService {
 				byte[] bytes = file.getBytes();
 				String jsonData = new String(bytes);
 				ObjectMapper mapper = new ObjectMapper();
-				bulkFiles = mapper.readValue(jsonData, new TypeReference<List<AoBulkDetail>>(){});
+				bulkFiles = mapper.readValue(jsonData, new TypeReference<List<AoBulkDetail>>() {
+				});
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new IOException(e.getMessage());
-			} 
+			}
 
 		}
 		return bulkFiles;
@@ -137,7 +151,7 @@ public class BulkService {
 		bulkfile.setApprovedBy("");
 
 		Date curDate = new Date();
-		
+
 		bulkfile.setUploadDate(curDate);
 
 		bulkfile.setTotalCompleted(BigDecimal.ZERO);
@@ -174,7 +188,7 @@ public class BulkService {
 		}
 
 	}
-	
+
 	public AoBulkFile CreateAccountBulkFiles(String[] id) {
 		final String uri = restURI + "/api/bulkfiles/{id}/files/";
 		List<AoBulkDetail> bulkDetails = new ArrayList<AoBulkDetail>();
@@ -192,11 +206,11 @@ public class BulkService {
 
 				// Loop create accounts for each files
 				bulkDetails = response.getBody();
-				
+
 				successCount = 0;
 				errorCount = 0;
-				
-				for (int j = 0; j < bulkDetails.size(); j++) {
+
+				for (int j = 0; bulkDetails != null && j < bulkDetails.size(); j++) {
 					HttpStatus stat = createAccount(bulkDetails.get(j));
 					if (stat.equals(HttpStatus.OK)) {
 						successCount = successCount + 1;
@@ -205,31 +219,32 @@ public class BulkService {
 					}
 				}
 
-				aoFileResult = bulkDetails.get(0).getAoBulkFile();
+				if (bulkDetails != null && bulkDetails.size() > 0) {
+					aoFileResult = bulkDetails.get(0).getAoBulkFile();
 
-				Date curDate = new Date();
-				aoFileResult.setProcessDate(curDate);
-				aoFileResult.setApprovedBy(String.valueOf(loginService.getUserLogin().getUserId()));
-				aoFileResult.setTotalRejected(new BigDecimal(errorCount));
-				aoFileResult.setTotalCompleted(new BigDecimal(successCount));
-				
-				
-				if(errorCount==0) {
-					updateBulkFile(aoFileResult, "03"); // Success
-				}else if(errorCount>0) {
-					updateBulkFile(aoFileResult, "04"); // process with error
+					Date curDate = new Date();
+					aoFileResult.setProcessDate(curDate);
+					aoFileResult.setApprovedBy(String.valueOf(loginService.getUserLogin().getUserId()));
+					aoFileResult.setTotalRejected(new BigDecimal(errorCount));
+					aoFileResult.setTotalCompleted(new BigDecimal(successCount));
+
+					if (errorCount == 0) {
+						updateBulkFile(aoFileResult, "03"); // Success
+					} else if (errorCount > 0) {
+						updateBulkFile(aoFileResult, "04"); // process with error
+					}
 				}
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return aoFileResult;
 	}
-	
+
 	private HttpStatus createAccount(final AoBulkDetail b) {
-		
+
 		HttpStatus status = HttpStatus.OK;
 		try {
 
@@ -266,4 +281,83 @@ public class BulkService {
 		}
 		return status;
 	}
+
+	private boolean validateAccount(final AoBulkDetail b) {
+
+		boolean isPass = true;
+		// Check CIF must not be null
+		if (b.getCifNo() == null) {
+			isPass = false;
+		}
+
+		// Check CIF is existed ?
+		if (isPass && !b.getCifNo().toString().equals("")) {
+			try {
+				AoCustomerInfo customer = customerService.getCustomerById(b.getCifNo().toString());
+				if (customer == null) {
+					isPass = false;
+				}
+			} catch (HttpClientErrorException e) {
+				if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+					isPass=false;
+				}
+			}
+		}
+		return isPass;
+	}
+
+	public AoBulkFile validateAccountBulkFiles(String[] id) {
+		final String uri = restURI + "/api/bulkfiles/{id}/files/";
+		List<AoBulkDetail> bulkDetails = new ArrayList<AoBulkDetail>();
+		AoBulkFile aoFileResult = new AoBulkFile();
+		int errorCount = 0;
+		int successCount = 0;
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			Map<String, String> params = new HashMap<String, String>();
+			for (int i = 0; i < id.length; i++) {
+				params.put("id", id[i]);
+				ResponseEntity<List<AoBulkDetail>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+						new ParameterizedTypeReference<List<AoBulkDetail>>() {
+						}, params);
+
+				// Loop validate accounts for each files
+				bulkDetails = response.getBody();
+
+				successCount = 0;
+				errorCount = 0;
+
+				for (int j = 0; bulkDetails != null && j < bulkDetails.size(); j++) {
+					boolean isPass = validateAccount(bulkDetails.get(j));
+					if (isPass) {
+						successCount = successCount + 1;
+					} else {
+						errorCount = errorCount + 1;
+					}
+				}
+
+				if (bulkDetails != null && bulkDetails.size() > 0) {
+					aoFileResult = bulkDetails.get(0).getAoBulkFile();
+
+					Date curDate = new Date();
+					aoFileResult.setProcessDate(curDate);
+					aoFileResult.setApprovedBy(String.valueOf(loginService.getUserLogin().getUserId()));
+					aoFileResult.setTotalFailed(new BigDecimal(errorCount));
+					aoFileResult.setTotalPassed(new BigDecimal(successCount));
+
+					if (errorCount == 0) {
+						updateBulkFile(aoFileResult, "02"); // validate passed, waiting for create accounts
+					} else if (errorCount > 0) {
+						updateBulkFile(aoFileResult, "05"); // validate failed, rejected
+					}
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return aoFileResult;
+	}
+
 }

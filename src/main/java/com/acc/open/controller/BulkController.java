@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class BulkController {
 	public String account(ModelMap model, @RequestParam("bulkfile") MultipartFile file) {
 		List<AoBulkDetail> bulkFileDetails = new ArrayList<AoBulkDetail>();
 		String msgError = "";
+		HttpStatus stat = HttpStatus.OK;
 		try {
 			bulkFileDetails = bs.readFile(file);
 		} catch (IOException e) {
@@ -38,11 +40,16 @@ public class BulkController {
 
 		if (!bulkFileDetails.isEmpty()) {
 			AoBulkFile bulkFile = bs.extractBulkFileHeader(file.getOriginalFilename(), bulkFileDetails);
-			bs.addBulkFile(bulkFile);
-			for (int i = 0; i < bulkFileDetails.size(); i++) {
-				bs.addBulkDetailFile(bulkFileDetails.get(i), bulkFileDetails.get(i).getId_file());
+			stat = bs.addBulkFile(bulkFile);
+			if(stat.equals(HttpStatus.OK)) {
+				for (int i = 0; i < bulkFileDetails.size(); i++) {
+					stat = bs.addBulkDetailFile(bulkFileDetails.get(i), bulkFileDetails.get(i).getId_file());
+				}
+			} else {
+				msgError = "Error while processing file.";
 			}
 		}
+		
 		List<AoBulkFile> bo = bs.getAllBulks();
 		if (!msgError.equals("")) {
 			msgError = "Error reading file : <b>" + file.getOriginalFilename() + "</b>" + "^Cause : " + msgError;
@@ -59,7 +66,7 @@ public class BulkController {
 
 	@RequestMapping(value = "/bulkdelete", method = RequestMethod.POST)
 	public String accountDelete(ModelMap model, @RequestParam("deleteItems") String items) {
-		if (!items.equals(null)) {
+		if (items != null) {
 			String[] deleteItems = items.split(",");
 			if (deleteItems.length > 0 && !deleteItems[0].equals("")) {
 				bs.deleteBulkFiles(deleteItems);
@@ -76,10 +83,28 @@ public class BulkController {
 	@RequestMapping(value = "/bulkcreate", method = RequestMethod.POST)
 	public String accountCreate(ModelMap model, @RequestParam("acctItems") String items) {
 		
-		if (!items.equals(null)) {
+		if (items != null) {
 			String[] createitems = items.split(",");
 			if (createitems.length > 0 && !createitems[0].equals("")) {
 				bs.CreateAccountBulkFiles(createitems);
+			}
+		}
+	
+		List<AoBulkFile> bo = bs.getAllBulks();
+		model.addAttribute("tabActive", "Account");
+		model.addAttribute("bulkfiles", bo);
+		return "bulkaccount/list";
+
+	}
+	
+	
+	@RequestMapping(value = "/bulkvalidate", method = RequestMethod.POST)
+	public String accountValidate(ModelMap model, @RequestParam("validateItems") String items) {
+		
+		if (items != null) {
+			String[] createitems = items.split(",");
+			if (createitems.length > 0 && !createitems[0].equals("")) {
+				bs.validateAccountBulkFiles(createitems);
 			}
 		}
 	

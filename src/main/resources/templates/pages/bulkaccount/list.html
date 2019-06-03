@@ -98,7 +98,56 @@ $(document).ready(function() {
 			});
         }
         
-});
+	});
+    
+	$('#confirm-validate').on('show.bs.modal', function(e) {
+    	
+        var validateId = [];
+        $.each($("input[name='bulkChk']:checked"), function(){            
+        	validateId.push($(this).attr('id'));
+        });
+        
+        $('#validateItems').val(validateId.join(", "));
+        if(validateId.length==0){
+        	$('#buttonCancel').text("OK")
+        	$('#buttonValidate').hide()
+         	$('.modal-header').html("<h5>Validate item</h5>")
+        	$('.modal-body').text('Please select item to validate', function() {
+				$('#confirm-validate').modal({
+					show : true
+				});
+			});
+        	
+        }else if(validateId.length==1){
+        	$('#buttonValidate').show()
+        	$('#buttonCancel').text("Cancel")
+        	$('.modal-header').html("<h5>Validate item</h5>")
+        	$('#buttonValidate').prop("onclick", null).off("click");
+        	$('#buttonValidate').click(function() {
+        		$('#validateAcctForm').submit();
+			});
+        	$('.modal-body').text('Are you sure you want to validate this bulk file?', function() {
+				$('#confirm-validate').modal({
+					show : true
+				});
+			});
+        	
+        }else if(validateId.length>1){
+        	$('#buttonValidate').show()
+        	$('#buttonCancel').text("Cancel")
+        	$('.modal-header').html("<h5>Validate multiple items</h5>")
+        	$('#buttonValidate').prop("onclick", null).off("click");
+        	$('#buttonValidate').click(function() {
+        		$('#validateAcctForm').submit();
+			});
+        	$('.modal-body').text('Are you sure you want to validate these bulk files?', function() {
+				$('#confirm-validate').modal({
+					show : true
+				});
+			});
+        }
+        
+	});
 });
 </script>
 <body>
@@ -122,7 +171,10 @@ $(document).ready(function() {
 				</form>
 			</div>
 			<div>
-				<input type="button" id = "BtnValidate" value="Validate" class="btn btn-primary btn-sm"></input>
+				<form id="validateAcctForm" method="POST" action="./bulkvalidate" >
+					<input type="hidden" id = "validateItems" name = "validateItems"></input>
+					<a href="#" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#confirm-validate">Validate</a>			
+				</form>
 			</div>
 			<div>
 				<form id="createAcctForm" method="POST" action="./bulkcreate" >
@@ -203,6 +255,23 @@ $(document).ready(function() {
 					<button type="button" class="btn btn-default" data-dismiss="modal"
 						id="buttonCancel">Cancel</button>
 					<a class="btn btn-warning btn-ok" id="buttonCreate">OK</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="confirm-validate" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5>Validate account</h5>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						id="buttonCancel">Cancel</button>
+					<a class="btn btn-primary btn-ok" id="buttonValidate">OK</a>
 				</div>
 			</div>
 		</div>
