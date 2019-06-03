@@ -86,6 +86,12 @@ $(document).ready(function() {
 
 		</div>
 		<br>
+		<div th:if="${msgError}" class="alert alert-danger alert-dismissible fade show small" style="width:85%;"> 
+        	<span th:utext="${#strings.replace(msgError, '^', '<br>')}"></span>
+        </div>
+        <div th:if="${msgSuccess}" class="alert alert-info alert-dismissible fade show small" style="width:85%;"> 
+        	<span th:utext="${#strings.replace(msgSuccess, '^', '<br>')}"></span>
+        </div>
 		<table class="table table-sm" style="width: 85%;font-size:13px;">
 
 			<thead class="thead-light">

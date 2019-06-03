@@ -1,5 +1,6 @@
 package com.acc.open.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class BulkService {
 
 	}
 
-	public List<AoBulkDetail> readFile(MultipartFile file) {
+	public List<AoBulkDetail> readFile(MultipartFile file) throws IOException {
 		List<AoBulkDetail> bulkFiles = new ArrayList<>();
 
 		if (!file.isEmpty()) {
@@ -79,10 +80,10 @@ public class BulkService {
 				String jsonData = new String(bytes);
 				ObjectMapper mapper = new ObjectMapper();
 				bulkFiles = mapper.readValue(jsonData, new TypeReference<List<AoBulkDetail>>(){});
-			}
-			catch (Exception e) {
+			} catch (IOException e) {
 				e.printStackTrace();
-			}
+				throw new IOException(e.getMessage());
+			} 
 
 		}
 		return bulkFiles;

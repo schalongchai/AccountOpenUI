@@ -1,5 +1,7 @@
 package com.acc.open.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,14 @@ public class BulkController {
 	
 	@RequestMapping(value = "/bulkupload", method = RequestMethod.POST)
 	public String account(ModelMap model,@RequestParam("bulkfile") MultipartFile file) {
-		List<AoBulkDetail> bulkFileDetails = bs.readFile(file);
+		List<AoBulkDetail> bulkFileDetails = new ArrayList<AoBulkDetail>();
+		String msgError="";
+		try {
+			bulkFileDetails = bs.readFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+			msgError= e.getMessage();
+		}
 		
 		if(!bulkFileDetails.isEmpty()) {
 			AoBulkFile bulkFile = bs.extractBulkFileHeader(file.getOriginalFilename(), bulkFileDetails);
@@ -35,6 +44,14 @@ public class BulkController {
 			}
 		}
 		List<AoBulkFile> bo = bs.getAllBulks();
+		if(!msgError.equals("")) {
+			msgError = "Error reading file : <b>"+ file.getOriginalFilename() + "</b>"
+		               +"^Cause : " + msgError; 
+			            // use ^ as newline character.
+			model.addAttribute("msgError", msgError);
+		}else {
+			model.addAttribute("msgSuccess", "Success uploaded file : <b>" + file.getOriginalFilename()+"</b>");
+		}
 		model.addAttribute("tabActive","Account");
 		model.addAttribute("bulkfiles", bo);
 		return "bulkaccount/list";
