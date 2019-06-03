@@ -20,112 +20,101 @@ import org.springframework.web.multipart.MultipartFile;
 import com.acc.open.model.AoBulkDetail;
 import com.acc.open.model.AoBulkFile;
 import com.acc.open.model.AoStatusFile;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class BulkService {
-    @Value("${spring.datasource.url}")
-    private String restURI;
-    
-    @Autowired
-	LogingService loginService;
-    
+	@Value("${spring.datasource.url}")
+	private String restURI;
 
-	public List<AoBulkFile> getAllBulks()
-	{
+	@Autowired
+	LogingService loginService;
+
+	public List<AoBulkFile> getAllBulks() {
 		List<AoBulkFile> bulkFile = null;
 		final String uri = restURI + "/api/bulkfiles/";
 		try {
-		    RestTemplate restTemplate = new RestTemplate();
-		    ResponseEntity<List<AoBulkFile>> response = restTemplate.exchange(uri, HttpMethod.GET,null, new ParameterizedTypeReference<List<AoBulkFile>>(){});
-		    bulkFile = response.getBody();
+			RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<List<AoBulkFile>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<AoBulkFile>>() {
+					});
+			bulkFile = response.getBody();
 		} catch (HttpClientErrorException e) {
-			
-		}
-		
 
-	    return bulkFile;
+		}
+
+		return bulkFile;
 	}
-	
-	
-	public void addBulkDetailFile(AoBulkDetail bulkfile,Long id_file)
-	{
-		final String uri = restURI + "/api/bulkfiles/"+ id_file.toString()+"/files/";
+
+	public void addBulkDetailFile(AoBulkDetail bulkfile, Long id_file) {
+		final String uri = restURI + "/api/bulkfiles/" + id_file.toString() + "/files/";
 		try {
-		    RestTemplate restTemplate = new RestTemplate();
+			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.postForEntity(uri, bulkfile, AoBulkDetail.class);
 		} catch (HttpClientErrorException e) {
-			
+
 		}
 
 	}
-	
-	public void addBulkFile(AoBulkFile bulkfile)
-	{
+
+	public void addBulkFile(AoBulkFile bulkfile) {
 		final String uri = restURI + "/api/bulkfiles/";
 		try {
-		    RestTemplate restTemplate = new RestTemplate();
+			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.postForEntity(uri, bulkfile, AoBulkFile.class);
 
 		} catch (HttpClientErrorException e) {
-			
+
 		}
 
 	}
-	
-	
-	public List<AoBulkDetail> readFile(MultipartFile file) {
-		 List<AoBulkDetail> bulkFiles = new ArrayList<>();
-		 AoBulkDetail bulkfileDetail = null;
-		 if (!file.isEmpty()) {
-		        try {
-		            byte[] bytes = file.getBytes();
-		            String data = new String(bytes);
-		            //Each entry must end with Semicolon ;
-		            //Split data for each line.
-		            String[] lineOfData = data.split(";");
-		            for(int i = 0; i< lineOfData.length ; i++ ) {
-		               bulkfileDetail = new  ObjectMapper().readValue(lineOfData[i].trim(), AoBulkDetail.class);
-		               if(bulkfileDetail!=null) {
-		            	   bulkFiles.add(bulkfileDetail);
-		               }
-		            }
-		        }
-		        catch (Exception e) {
-		        	
-		        }
 
-		 }
-		 return bulkFiles;
-	
+	public List<AoBulkDetail> readFile(MultipartFile file) {
+		List<AoBulkDetail> bulkFiles = new ArrayList<>();
+
+		if (!file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
+				String jsonData = new String(bytes);
+				ObjectMapper mapper = new ObjectMapper();
+				bulkFiles = mapper.readValue(jsonData, new TypeReference<List<AoBulkDetail>>(){});
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+		return bulkFiles;
+
 	}
-	
-	public AoBulkFile extractBulkFileHeader(String fileName,List<AoBulkDetail> bulkFileDetails) {
+
+	public AoBulkFile extractBulkFileHeader(String fileName, List<AoBulkDetail> bulkFileDetails) {
 		AoBulkFile bulkfile = new AoBulkFile();
 		bulkfile.setId(bulkFileDetails.get(0).getId_file());
 		bulkfile.setFileName(fileName);
 		bulkfile.setApprovedBy("");
 
-		Date curDate=new Date();  
-		bulkfile.setProcessDate(curDate);
+		Date curDate = new Date();
 		
+		bulkfile.setUploadDate(curDate);
+
 		bulkfile.setTotalCompleted(BigDecimal.ZERO);
 		bulkfile.setTotalFailed(BigDecimal.ZERO);
 		bulkfile.setTotalPassed(BigDecimal.ZERO);
 		bulkfile.setTotalRec(new BigDecimal(bulkFileDetails.size()));
 		bulkfile.setTotalRejected(BigDecimal.ZERO);
-		bulkfile.setUploadBy(loginService.getUserLogin().getUserId()+"");
-		
+		bulkfile.setUploadBy(String.valueOf(loginService.getUserLogin().getUserId()));
+
 		AoStatusFile stat = new AoStatusFile();
 		stat.setCode("01");
-		
+
 		bulkfile.setAoStatusFile(stat);
-		
+
 		return bulkfile;
 	}
-	
-	public void deleteBulkFiles(String[] id)
-	{
+
+	public void deleteBulkFiles(String[] id) {
 		final String uri = restURI + "/api/bulkfiles/{id}";
 		try {
 			RestTemplate restTemplate = new RestTemplate();
@@ -135,7 +124,7 @@ public class BulkService {
 				ResponseEntity<AoBulkFile> response = restTemplate.exchange(uri, HttpMethod.DELETE, null,
 						new ParameterizedTypeReference<AoBulkFile>() {
 						}, params);
-				
+
 				response.getBody();
 
 			}

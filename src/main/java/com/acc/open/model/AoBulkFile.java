@@ -51,6 +51,9 @@ public class AoBulkFile implements Serializable {
 
 
 	private String uploadBy;
+	
+	
+	private Date uploadDate;
 
 
 	private AoStatusFile aoStatusFile;
@@ -148,6 +151,14 @@ public class AoBulkFile implements Serializable {
 
 	public void setAoStatusFile(AoStatusFile aoStatusFile) {
 		this.aoStatusFile = aoStatusFile;
+	}
+
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 
 }
