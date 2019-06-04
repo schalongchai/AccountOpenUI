@@ -75,12 +75,15 @@ public class BulkService {
 		return bulkFile;
 	}
 
-	public HttpStatus addBulkDetailFile(AoBulkDetail bulkfile, Long id_file) {
+	public HttpStatus addBulkDetailFile(AoBulkDetail bulkDetailfile, Long id_file) {
 		final String uri = restURI + "/api/bulkfiles/" + id_file.toString() + "/files/";
 		HttpStatus stat = HttpStatus.OK;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			restTemplate.postForEntity(uri, bulkfile, AoBulkDetail.class);
+			ResponseEntity<AoBulkDetail> response = restTemplate.postForEntity(uri, bulkDetailfile, AoBulkDetail.class);
+			if(response.getStatusCode().equals(HttpStatus.OK)){
+				stat = response.getStatusCode();
+			}
 		} catch (HttpClientErrorException e) {
 			if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
 				stat = e.getStatusCode();
@@ -94,7 +97,10 @@ public class BulkService {
 		HttpStatus stat = HttpStatus.OK;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			restTemplate.postForEntity(uri, bulkfile, AoBulkFile.class);
+			ResponseEntity<AoBulkFile> response = restTemplate.postForEntity(uri, bulkfile, AoBulkFile.class);
+			if(response.getStatusCode().equals(HttpStatus.OK)){
+				stat = response.getStatusCode();
+			}
 
 		} catch (HttpClientErrorException e) {
 			if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
@@ -130,7 +136,7 @@ public class BulkService {
 		if (!file.isEmpty()) {
 			try {
 				byte[] bytes = file.getBytes();
-				String jsonData = new String(bytes);
+				String jsonData = new String(bytes,"UTF-8");
 				ObjectMapper mapper = new ObjectMapper();
 				bulkFiles = mapper.readValue(jsonData, new TypeReference<List<AoBulkDetail>>() {
 				});
